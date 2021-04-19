@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     # Third-party
     'debug_toolbar',
     'django_extensions',
+    'rest_framework',
 
     # Project-specific
     'core',
@@ -138,6 +139,7 @@ INTERNAL_IPS = [
     '127.0.0.1',
     # ...
 ]
+
 
 django_on_heroku.settings(locals())
 del DATABASES['default']['OPTIONS']['sslmode']
