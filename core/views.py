@@ -11,7 +11,8 @@ class IngredientList(generics.ListCreateAPIView):
     serializer_class = IngredientSerializer
 
     def perform_create(self, serializer):
-        new_pantry = Pantry.objects.get_or_create(user=self.request.user)
+        new_pantry = Pantry.objects.get_or_create(
+            user=User.objects.get_or_create(username='user')[0])
         serializer.save(pantry=new_pantry[0])
 
 
