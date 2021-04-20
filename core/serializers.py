@@ -15,3 +15,29 @@ class PantrySerializer(serializers.ModelSerializer):
     class Meta:
         model = Pantry
         fields = ['user', 'ingredients_list', ]
+
+
+class RecipeIngredientSerializer(serializers.ModelSerializer):
+    ingredient = serializers.ReadOnlyField(source="ingredient.name")
+
+    class Meta:
+        model = RecipeIngredient
+        fields = ['measurement', 'ingredient']
+
+
+class RecipeSerializer(serializers.ModelSerializer):
+    recipe_ingredients = RecipeIngredientSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Recipe
+        fields = [
+            'id', 'external_id', 'title', 'category', 'origin', 'instructions', 'recipe_ingredients',
+        ]
+
+
+class UserSerializer(serializers.ModelSerializer):
+    recipes = serializers.ReadOnlyField(source="user.pantry.recipe")
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'recipes', ]
