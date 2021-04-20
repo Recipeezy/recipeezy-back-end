@@ -4,7 +4,10 @@ from django.urls import include, path
 
 urlpatterns = [
     path('ingredients/', views.IngredientList.as_view(), name='ingredient_list'),
+    path('ingredients/<int:pk>/', views.IngredientDetail.as_view(),
+         name='ingredient_detail'),
     path('pantry/', views.PantryList.as_view(), name='pantry_list'),
+
 ]
 
 urlpatterns += format_suffix_patterns(urlpatterns)
