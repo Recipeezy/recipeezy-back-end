@@ -11,11 +11,13 @@ class IngredientList(generics.ListCreateAPIView):
     serializer_class = IngredientSerializer
 
     def perform_create(self, serializer):
-        try:
-            new_pantry = Pantry.objects.get(user=self.request.user)
-        except self.model.DoesNotExist:
-            new_pantry = Pantry.objects.create(user=self.request.user)
-        serializer.save(pantry=new_pantry)
+        new_pantry = Pantry.objects.get_or_create(user=self.request.user)
+        serializer.save(pantry=new_pantry[0])
+
+
+class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
 
 
 class PantryList(generics.ListAPIView):
