@@ -7,6 +7,8 @@ urlpatterns = [
     path('ingredients/', views.IngredientList.as_view(), name='ingredient_list'),
     path('ingredients/<int:pk>/', views.IngredientDetail.as_view(),
          name='ingredient_detail'),
+    path('ingredients/pantry/', views.IngredientPantryList.as_view()),
+    # path('ingredients/shopping_list/', views.IngredientShoppingList.as_view()),
     path('pantry/', views.PantryList.as_view(), name='pantry_list'),
     path('recipes/', views.RecipeList.as_view(), name='recipes_list'),
     path('recipes/<int:pk>/', views.RecipeDetail.as_view(), name='recipe_detail'),
