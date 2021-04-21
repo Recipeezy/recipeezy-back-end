@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_extensions',
     'rest_framework',
+    'corsheaders',
 
     # Project-specific
     'core',
@@ -139,6 +140,8 @@ INTERNAL_IPS = [
     '127.0.0.1',
     # ...
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 django_on_heroku.settings(locals())
