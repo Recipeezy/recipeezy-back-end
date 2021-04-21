@@ -6,15 +6,16 @@ from .models import User, Pantry, Recipe, RecipeIngredient, Ingredient, Shopping
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ['id', 'name',]
+        fields = ['id', 'name', ]
 
 
 class PantrySerializer(serializers.ModelSerializer):
     ingredients_list = IngredientSerializer(many=True, read_only=True)
+    username = serializers.ReadOnlyField(source="user.username")
 
     class Meta:
         model = Pantry
-        fields = ['user', 'ingredients_list', ]
+        fields = ['user', 'username', 'ingredients_list', ]
 
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
@@ -48,4 +49,4 @@ class ShoppingListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ShoppingList
-        fields = ['id', 'shopping_list',]
+        fields = ['id', 'shopping_list', ]
