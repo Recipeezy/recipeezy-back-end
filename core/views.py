@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .models import User, Pantry, Recipe, RecipeIngredient, Ingredient
-from .serializers import IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer
+from .models import User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList
+from .serializers import IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer, ShoppingListSerializer
 
 # Create your views here.
 
@@ -39,3 +39,8 @@ class RecipeDetail(generics.RetrieveUpdateDestroyAPIView):
 class UserList(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class ShoppingListDetail(generics.ListCreateAPIView):
+    queryset = ShoppingList.objects.all()
+    serializer_class = ShoppingListSerializer
