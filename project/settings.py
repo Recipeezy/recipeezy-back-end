@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'django_extensions',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     'corsheaders',
 
     # Project-specific
@@ -141,6 +143,17 @@ INTERNAL_IPS = [
     '127.0.0.1',
     # ...
 ]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ),
+}
+
 
 CORS_ALLOW_ALL_ORIGINS = True
 
