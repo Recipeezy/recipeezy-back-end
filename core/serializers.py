@@ -6,7 +6,7 @@ from .models import User, Pantry, Recipe, RecipeIngredient, Ingredient, Shopping
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ['name', ]
+        fields = ['id', 'name',]
 
 
 class PantrySerializer(serializers.ModelSerializer):
