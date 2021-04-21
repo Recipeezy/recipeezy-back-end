@@ -3,10 +3,13 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from django.urls import include, path
 
 urlpatterns = [
+    path('users/', views.UserList.as_view(), name="users_list"),
     path('ingredients/', views.IngredientList.as_view(), name='ingredient_list'),
     path('ingredients/<int:pk>/', views.IngredientDetail.as_view(),
          name='ingredient_detail'),
     path('pantry/', views.PantryList.as_view(), name='pantry_list'),
+    path('recipes/', views.RecipeList.as_view(), name='recipes_list'),
+    path('recipes/<int:pk>/', views.RecipeDetail.as_view(), name='recipe_detail'),
 
 ]
 

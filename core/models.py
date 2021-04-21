@@ -33,17 +33,21 @@ class Recipe(models.Model):
         through='RecipeIngredient',
         through_fields=('recipe', 'ingredient')
     )
-    pantry = models.ForeignKey(Pantry, on_delete=models.CASCADE)
+    pantry = models.ForeignKey(
+        Pantry, on_delete=models.CASCADE, blank=True, null=True)
     origin = models.CharField(max_length=100, null=True, blank=True)
     instructions = models.TextField(max_length=2500, null=True, blank=True)
+    external_id = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return self.title
 
 
 class RecipeIngredient(models.Model):
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, related_name="recipe_ingredients")
+    ingredient = models.ForeignKey(
+        Ingredient, on_delete=models.CASCADE, related_name="ingredients_list")
     measurement = models.CharField(max_length=100)
 
     def __str__(self):
