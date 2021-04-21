@@ -20,6 +20,8 @@ class Ingredient(models.Model):
     name = models.CharField(max_length=100)
     pantry = models.ForeignKey(
         Pantry, on_delete=models.CASCADE, null=True, blank=True, related_name="ingredients_list")
+    shoppinglist = models.ForeignKey(
+        'ShoppingList', on_delete=models.CASCADE, null=True, blank=True, related_name="shopping_list")
 
     def __str__(self):
         return self.name
@@ -52,3 +54,10 @@ class RecipeIngredient(models.Model):
 
     def __str__(self):
         return f'{self.recipe}, {self.ingredient}'
+
+
+class ShoppingList(models.Model):
+    pantry = models.ForeignKey(Pantry, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.id
