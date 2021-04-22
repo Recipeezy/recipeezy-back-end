@@ -43,6 +43,14 @@ class PantryList(generics.ListAPIView):
         return Pantry.objects.filter(user=self.request.user)
 
 
+class PantryAdd(generics.CreateAPIView):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(pantry=Pantry.objects.get(user=self.request.user))
+
+
 class RecipeList(generics.ListCreateAPIView):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
