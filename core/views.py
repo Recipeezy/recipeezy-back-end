@@ -10,11 +10,6 @@ class IngredientList(generics.ListCreateAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
 
-    def perform_create(self, serializer):
-        new_pantry = Pantry.objects.get_or_create(
-            user=User.objects.get(username=self.request.user.username))
-        serializer.save(pantry=new_pantry[0])
-
 
 class IngredientPantryList(generics.ListCreateAPIView):
     queryset = Ingredient.objects.all()
@@ -42,7 +37,18 @@ class PantryList(generics.ListAPIView):
     serializer_class = PantrySerializer
 
     def get_queryset(self):
+        if self.request.user.id not in [pantry.user.id for pantry in Pantry.objects.all()]:
+            Pantry.objects.create(user=self.request.user)
+
         return Pantry.objects.filter(user=self.request.user)
+
+
+class PantryAdd(generics.CreateAPIView):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(pantry=Pantry.objects.get(user=self.request.user))
 
 
 class RecipeList(generics.ListCreateAPIView):
@@ -60,7 +66,12 @@ class UserList(generics.ListCreateAPIView):
     serializer_class = UserSerializer
 
 
-class ShoppingListDetail(generics.ListCreateAPIView):
-    queryset = ShoppingList.objects.all()
+class ShoppingListDetail(generics.ListAPIView):
+    queryset = Ingredient.objects.all()
     serializer_class = ShoppingListSerializer
 
+    def get_queryset(self):
+        if self.request.user.id not in [shop.user.id for shop in ShoppingList.objects.all()]:
+            ShoppingList.objects.create(user=self.request.user)
+
+        return ShoppingList.objects.filter(user=self.request.user)
