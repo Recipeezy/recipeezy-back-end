@@ -75,3 +75,10 @@ class ShoppingListDetail(generics.ListAPIView):
             ShoppingList.objects.create(user=self.request.user)
 
         return ShoppingList.objects.filter(user=self.request.user)
+
+class ShoppingListAdd(generics.ListCreateAPIView):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(shoppinglist=self.request.user.shoppinglist)
