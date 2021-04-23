@@ -15,14 +15,6 @@ class IngredientInfoList(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = IngredientInfoSerializer
 
 
-class IngredientPantryList(generics.ListCreateAPIView):
-    queryset = Ingredient.objects.all()
-    serializer_class = IngredientSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(pantry=self.request.user.pantry)
-
-
 class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
@@ -49,7 +41,14 @@ class PantryAdd(generics.CreateAPIView):
 
 class RecipeList(generics.ListCreateAPIView):
     queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return RecipeCreateSerializer
+        return RecipeSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 
 class RecipeDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -78,8 +77,3 @@ class ShoppingListAdd(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(shoppinglist=self.request.user.shoppinglist)
-
-
-class RecipeMake(generics.ListCreateAPIView):
-    queryset = Recipe.objects.all()
-    serializer_class = RecipeCreateSerializer

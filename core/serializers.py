@@ -58,13 +58,13 @@ class ShoppingListSerializer(serializers.ModelSerializer):
         fields = ['id', 'shopping_list', ]
 
 
-
 class RecipeCreateSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(many=True)
     
     class Meta:
         model = Recipe
-        fields = ['id', 'title', 'category', 'origin', 'instructions', 'ingredients',]
+        fields = ['id', 'title', 'category', 'origin', 'instructions', 
+            'ingredients',]
     
     def create(self, validated_data):
         ingredients_data = validated_data.pop('ingredients')
