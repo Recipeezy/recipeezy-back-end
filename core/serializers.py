@@ -9,6 +9,12 @@ class IngredientSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', ]
 
 
+class IngredientInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ingredient
+        fields = ['id', 'name', 'pantry', 'shoppinglist', ]
+
+
 class PantrySerializer(serializers.ModelSerializer):
     ingredients_list = IngredientSerializer(many=True, read_only=True)
     username = serializers.ReadOnlyField(source="user.username")
@@ -23,7 +29,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RecipeIngredient
-        fields = ['measurement', 'ingredient']
+        fields = ['measurement', 'ingredient', ] 
 
 
 class RecipeSerializer(serializers.ModelSerializer):

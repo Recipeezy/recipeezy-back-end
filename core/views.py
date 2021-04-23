@@ -1,14 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
 from .models import User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList
-from .serializers import IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer, ShoppingListSerializer
-
-# Create your views here.
+from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
+ShoppingListSerializer, IngredientInfoSerializer)
 
 
 class IngredientList(generics.ListCreateAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
+
+
+class IngredientInfoList(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientInfoSerializer
 
 
 class IngredientPantryList(generics.ListCreateAPIView):
@@ -17,14 +21,6 @@ class IngredientPantryList(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(pantry=self.request.user.pantry)
-
-
-# class IngredientShoppingList(generics.ListCreateAPIView):
-#     queryset = Ingredient.objects.all()
-#     serializer_class = IngredientSerializer
-
-#     def perform_create(self, serializer):
-#         serializer.save(shopping_list=self.request.shopping_list)
 
 
 class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
