@@ -20,7 +20,7 @@ https://recipeezy-app.herokuapp.com/shopping_list/ <-- this works in a similar m
 
 ### POST requests
 
-https://recipeezy-app.herokuapp.com/ingredients/ 
+https://recipeezy-app.herokuapp.com/pantry/add/ <-- this endpoint adds an ingredient straight into the pantry of the logged in user
 
 ```JSON
 # input
@@ -34,7 +34,42 @@ https://recipeezy-app.herokuapp.com/ingredients/
 }
 ```
 
-### PATCH requests
+https://recipeezy-app.herokuapp.com/shopping_list/add/ <-- this endpoint adds an ingredient to the logged in users Shopping list
+
+```JSON
+# input
+{
+  "name": "Juice"
+}
+# output
+# 201
+{
+  "name": "Juice"
+}
+```
+
+https://recipeezy-app.herokuapp.com/recipes/ <-- just designate the recipes endpoint
+
+```JSON
+# input
+{
+  "title": "steak"
+}
+# output
+{
+  "id": 3,
+  "external_id": null,
+  "title": "Steak",
+  "category": null,
+  "origin": null,
+  "instructions": null,
+  "recipe_ingredients": []
+}
+```
+
+
+
+### PUT requests
 
 https://recipeezy-app.herokuapp.com/ingredients/1/ <-- make sure you designate which ingredient object we are going to PATCH
 
@@ -49,6 +84,34 @@ https://recipeezy-app.herokuapp.com/ingredients/1/ <-- make sure you designate w
   "name": "Hammy"
 }
 ```
+
+https://recipeezy-app.herokuapp.com/ingredients/1/info/ <-- this new endpoint is for the particular use of wanting to swap which containers the ingredient is related too. So per the usual you need to specifiy which ingredient with that "1" which is it's id but then you also need to add the "info" at the end so that we can change more information about that object.
+
+```JSON
+# GET results before doing a put on this ingredient
+{
+  "id": "8",
+  "name": "popcorn",
+  "pantry": 2,
+  "shoppinglist": null
+}
+# Now let's make the PUT request
+# input
+{
+	"name": "popcorn 2",
+	"pantry": null,              < -- desired container swapping
+	"shoppinglist": 2									null means not related anymore
+}																		while the number is the container id
+# output
+{
+  "id": 8,
+  "name": "popcorn 2",
+  "pantry": null,
+  "shoppinglist": 2
+}
+```
+
+For now you must still put in the name manually however if you want you do not have to change the name with this step and could just swap the containers or make them both null or both related.
 
 ### DELETE requests
 
