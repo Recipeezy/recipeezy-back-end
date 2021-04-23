@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
 from .models import User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList
 from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
-ShoppingListSerializer, IngredientInfoSerializer)
+ShoppingListSerializer, IngredientInfoSerializer, RecipeCreateSerializer)
 
 
 class IngredientList(generics.ListCreateAPIView):
@@ -78,3 +78,8 @@ class ShoppingListAdd(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(shoppinglist=self.request.user.shoppinglist)
+
+
+class RecipeMake(generics.ListCreateAPIView):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeCreateSerializer

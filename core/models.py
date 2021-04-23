@@ -33,7 +33,8 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         Ingredient,
         through='RecipeIngredient',
-        through_fields=('recipe', 'ingredient')
+        through_fields=('recipe', 'ingredient'),
+        related_name='ingredients_info'
     )
     pantry = models.ForeignKey(
         Pantry, on_delete=models.CASCADE, blank=True, null=True)
