@@ -2,6 +2,49 @@
 
 ## Heroku Endpoints
 
+### Token getting and login
+
+Need to create a user?
+
+https://recipeezy-app.herokuapp.com/auth/users/  <-- Make sure this is a POST request
+
+```JSON
+# JSON input
+{
+  "username": "Userexample",
+  "password": "averybadpassword"
+}
+# output 
+# 201
+{
+  "email": "",
+  "username": "testuser",
+  "id": 3
+}
+```
+
+Ok so now we have a user but we need to get a token for that user. how do we do that?
+
+https://recipeezy-app.herokuapp.com/auth/token/login/   <-- first we need to change the endpoint from "/auth/users/" to "/auth/token/login/". We are still however going to be doing a POST request for this. Here is an example of that user getting their token.
+
+```JSON
+# input
+{
+  "username": "Userexample",
+  "password": "averybadpassword"
+}
+# output
+{
+  "auth_token": "ca5867705821d87fcc08fb853dd6b358c93015dc"
+}
+```
+
+We will now be able to use this token aquisition for a more secure login.
+
+### Basic GET requests
+
+
+
 Get Requests that are currently available
 
 https://recipeezy-app.herokuapp.com/users/
@@ -48,22 +91,40 @@ https://recipeezy-app.herokuapp.com/shopping_list/add/ <-- this endpoint adds an
 }
 ```
 
-https://recipeezy-app.herokuapp.com/recipes/ <-- just designate the recipes endpoint
+https://recipeezy-app.herokuapp.com/recipes/ <-- required fields are "title" and "ingredients". When adding ingredients in with JSON make sure you wrap it properly. 
+
+Ex: "ingredients: [   {   "name":  "potato"   }     ]". Even if only adding one ingredient it needs to be wrapped in square brackets to make it a list.
 
 ```JSON
 # input
 {
-  "title": "steak"
+	"title": "Chicken Noodle Soup",
+	"ingredients": [
+		{
+			"name": "chicken"
+		},                        < --- notice the comma, indicating more
+		{																more items will be made
+			"name": "broth"
+		}
+	]
 }
 # output
 {
-  "id": 3,
-  "external_id": null,
-  "title": "Steak",
+  "id": 53,
+  "title": "Chicken Noodle Soup",
   "category": null,
   "origin": null,
   "instructions": null,
-  "recipe_ingredients": []
+  "ingredients": [
+    {
+      "id": 43,
+      "name": "chicken"
+    },
+    {
+      "id": 44,
+      "name": "broth"
+    }
+  ]
 }
 ```
 
