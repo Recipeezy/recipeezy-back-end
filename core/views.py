@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
 from .models import User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList
 from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
-ShoppingListSerializer, IngredientInfoSerializer)
+ShoppingListSerializer, IngredientInfoSerializer, RecipeCreateSerializer)
 
 
 class IngredientList(generics.ListCreateAPIView):
@@ -13,14 +13,6 @@ class IngredientList(generics.ListCreateAPIView):
 class IngredientInfoList(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientInfoSerializer
-
-
-class IngredientPantryList(generics.ListCreateAPIView):
-    queryset = Ingredient.objects.all()
-    serializer_class = IngredientSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(pantry=self.request.user.pantry)
 
 
 class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -49,7 +41,14 @@ class PantryAdd(generics.CreateAPIView):
 
 class RecipeList(generics.ListCreateAPIView):
     queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == 'POST':
+            return RecipeCreateSerializer
+        return RecipeSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 
 class RecipeDetail(generics.RetrieveUpdateDestroyAPIView):

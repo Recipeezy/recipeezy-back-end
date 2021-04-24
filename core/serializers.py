@@ -1,4 +1,4 @@
-from rest_framework import serializers
+from rest_framework import serializers, fields
 
 from .models import User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList
 
@@ -38,7 +38,7 @@ class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = [
-            'id', 'external_id', 'title', 'category', 'origin', 'instructions', 'recipe_ingredients',
+            'id', 'external_id', 'title', 'category', 'origin', 'instructions', 'recipe_ingredients', 'ingredients',
         ]
 
 
@@ -56,3 +56,20 @@ class ShoppingListSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoppingList
         fields = ['id', 'shopping_list', ]
+
+
+class RecipeCreateSerializer(serializers.ModelSerializer):
+    ingredients = IngredientSerializer(many=True)
+    
+    class Meta:
+        model = Recipe
+        fields = ['id', 'title', 'category', 'origin', 'instructions', 
+            'ingredients',]
+    
+    def create(self, validated_data):
+        ingredients_data = validated_data.pop('ingredients')
+        recipe = Recipe.objects.create(**validated_data)
+        for ingredient_data in ingredients_data:
+            ingredient = Ingredient.objects.create(name=ingredient_data['name'])
+            recipe.ingredients.add(ingredient)
+        return recipe
