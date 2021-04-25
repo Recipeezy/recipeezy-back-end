@@ -12,7 +12,13 @@ class IngredientSerializer(serializers.ModelSerializer):
 class IngredientInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ['id', 'name', 'pantry', 'shoppinglist', ]
+        fields = ['id', 'name', 'pantry', 'shoppinglist',]
+
+
+class IngredientSwapSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ingredient
+        fields = ['id', 'pantry', 'shoppinglist', ]
 
 
 class PantrySerializer(serializers.ModelSerializer):
