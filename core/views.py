@@ -2,7 +2,8 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
 from .models import User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList
 from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
-ShoppingListSerializer, IngredientInfoSerializer, RecipeCreateSerializer)
+ShoppingListSerializer, IngredientInfoSerializer, RecipeCreateSerializer, PantryRecipesSerializer,
+RecipePantrySerializer)
 
 
 class IngredientList(generics.ListCreateAPIView):
@@ -48,7 +49,7 @@ class RecipeList(generics.ListCreateAPIView):
         return RecipeSerializer
 
     def perform_create(self, serializer):
-        serializer.save()
+        serializer.save(pantry=self.request.user.pantry)
 
 
 class RecipeDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -77,3 +78,22 @@ class ShoppingListAdd(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(shoppinglist=self.request.user.shoppinglist)
+
+
+class PantryRecipes(generics.ListAPIView):
+    queryset = Pantry.objects.all()
+    serializer_class = PantryRecipesSerializer
+
+    def get_queryset(self):
+        if self.request.user.id not in [pantry.user.id for pantry in Pantry.objects.all()]:
+            Pantry.objects.create(user=self.request.user)
+
+        return Pantry.objects.filter(user=self.request.user)
+
+
+class PantryRecipeAdd(generics.RetrieveUpdateAPIView):
+    querset = Pantry.objects.all()
+    serializer_class = RecipeSerializer
+
+    def perform_update(self, serializer):
+        serializer.save(pantry=self.request.user.pantry)

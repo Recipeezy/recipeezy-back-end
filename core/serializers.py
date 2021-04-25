@@ -21,7 +21,7 @@ class PantrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Pantry
-        fields = ['user', 'username', 'ingredients_list', ]
+        fields = ['user', 'username', 'ingredients_list',]
 
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
@@ -29,17 +29,38 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RecipeIngredient
-        fields = ['measurement', 'ingredient', ] 
+        fields = ['measurement', 'ingredient',] 
 
 
 class RecipeSerializer(serializers.ModelSerializer):
     recipe_ingredients = RecipeIngredientSerializer(many=True, read_only=True)
+    ingredients = IngredientSerializer(many=True, read_only=True)
 
     class Meta:
         model = Recipe
         fields = [
-            'id', 'external_id', 'title', 'category', 'origin', 'instructions', 'recipe_ingredients', 'ingredients',
+            'id', 'external_id', 'title', 'category', 'origin', 'instructions', 'pantry', 'recipe_ingredients', 'ingredients',
         ]
+
+
+class RecipePantrySerializer(serializers.ModelSerializer):
+    ingredients = IngredientSerializer(many=True)
+
+    class Meta:
+        model = Recipe
+        fields = [
+            'id', 'external_id', 'title', 'category', 'origin', 'instructions', 'ingredients',
+        ]
+
+
+class PantryRecipesSerializer(serializers.ModelSerializer):
+    ingredients_list = IngredientSerializer(many=True, read_only=True)
+    username = serializers.ReadOnlyField(source="user.username")
+    pantry_recipes = RecipePantrySerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Pantry
+        fields = ['user', 'username', 'ingredients_list', 'pantry_recipes',]
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -47,7 +68,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'recipes', ]
+        fields = ['id', 'username', 'recipes',]
 
 
 class ShoppingListSerializer(serializers.ModelSerializer):
@@ -64,7 +85,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ['id', 'title', 'category', 'origin', 'instructions', 
-            'ingredients',]
+            'ingredients', 'pantry',]
     
     def create(self, validated_data):
         ingredients_data = validated_data.pop('ingredients')
