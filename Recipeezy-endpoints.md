@@ -61,6 +61,8 @@ https://recipeezy-app.herokuapp.com/recipes/1/ <-- the '1' designates which reci
 
 https://recipeezy-app.herokuapp.com/shopping_list/ <-- this works in a similar manner as pantry. Purely a container to hold ingredient objects
 
+https://recipeezy-app.herokuapp.com/ingredients/info/ <-- This show all the ingredients but also which containers they are currently related too.
+
 ### POST requests
 
 https://recipeezy-app.herokuapp.com/pantry/add/ <-- this endpoint adds an ingredient straight into the pantry of the logged in user
@@ -146,33 +148,9 @@ https://recipeezy-app.herokuapp.com/ingredients/1/ <-- make sure you designate w
 }
 ```
 
-https://recipeezy-app.herokuapp.com/ingredients/1/info/ <-- this new endpoint is for the particular use of wanting to swap which containers the ingredient is related too. So per the usual you need to specifiy which ingredient with that "1" which is it's id but then you also need to add the "info" at the end so that we can change more information about that object.
+https://recipeezy-app.herokuapp.com/pantry/recipes/1/add/ <-- This endpoint is taking a recipe and adding it directly to your pantry. That is to say the pantry of the logged in user. where you see the "1" should be the id of whichever recipe you are designating to go into the pantry. This will automatically make the recipe related to the logged in user, No need for any JSON input.
 
-```JSON
-# GET results before doing a put on this ingredient
-{
-  "id": "8",
-  "name": "popcorn",
-  "pantry": 2,
-  "shoppinglist": null
-}
-# Now let's make the PUT request
-# input
-{
-	"name": "popcorn 2",
-	"pantry": null,              < -- desired container swapping
-	"shoppinglist": 2									null means not related anymore
-}																		while the number is the container id
-# output
-{
-  "id": 8,
-  "name": "popcorn 2",
-  "pantry": null,
-  "shoppinglist": 2
-}
-```
-
-For now you must still put in the name manually however if you want you do not have to change the name with this step and could just swap the containers or make them both null or both related.
+https://recipeezy-app.herokuapp.com/ingredients/1/swap/ <-- this new endpoint is for the particular use of wanting to swap which containers the ingredient is related too. So per the usual you need to specifiy which ingredient with that "1" which is it's id but then you also need to add the "swap" at the end so that we can change more information about that object. This enpoint requires no additionally information. Just know that what it is doing is Making the ingredient attribute "shoppinglist = null" and making the attribute "pantry = logged in users pantry". 
 
 ### DELETE requests
 
@@ -184,6 +162,15 @@ https://recipeezy-app.herokuapp.com/ingredients/1/ <-- make sure you designate w
 ```
 
 Now when you do a get request of all ingredients the ingredient we selected will be gone
+
+https://recipeezy-app.herokuapp.com/recipes/1/ <-- make sure you designate which Recipe object we are going to DELETE
+
+```JSON
+# output
+# 204 NO content
+```
+
+Now when you do a get request of all recipes the recipe we selected will be gone
 
 ## mealdb endpoints
 
