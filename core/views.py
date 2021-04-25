@@ -3,7 +3,7 @@ from rest_framework import generics
 from .models import User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList
 from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
 ShoppingListSerializer, IngredientInfoSerializer, RecipeCreateSerializer, PantryRecipesSerializer,
-RecipePantrySerializer)
+RecipePantrySerializer, IngredientSwapSerializer)
 
 
 class IngredientList(generics.ListCreateAPIView):
@@ -11,14 +11,22 @@ class IngredientList(generics.ListCreateAPIView):
     serializer_class = IngredientSerializer
 
 
-class IngredientInfoList(generics.RetrieveUpdateDestroyAPIView):
+class IngredientInfoList(generics.ListAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientInfoSerializer
 
 
+class IngredientContainerSwap(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSwapSerializer
+
+    def perform_update(self, serializer):
+        serializer.save(pantry=self.request.user.pantry, shoppinglist=None)
+
+
 class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ingredient.objects.all()
-    serializer_class = IngredientSerializer
+    serializer_class = IngredientInfoSerializer
 
 
 class PantryList(generics.ListAPIView):
