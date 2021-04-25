@@ -37,7 +37,7 @@ class Recipe(models.Model):
         related_name='ingredients_info'
     )
     pantry = models.ForeignKey(
-        Pantry, on_delete=models.CASCADE, blank=True, null=True)
+        Pantry, on_delete=models.CASCADE, blank=True, null=True, related_name="pantry_recipes")
     origin = models.CharField(max_length=100, null=True, blank=True)
     instructions = models.TextField(max_length=2500, null=True, blank=True)
     external_id = models.CharField(max_length=50, blank=True, null=True)
