@@ -48,6 +48,14 @@ class PantryAdd(generics.CreateAPIView):
         serializer.save(pantry=Pantry.objects.get(user=self.request.user))
 
 
+class PantryRemove(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSwapSerializer
+
+    def perform_update(self, serializer):
+        serializer.save(pantry=None)
+
+
 class RecipeList(generics.ListCreateAPIView):
     queryset = Recipe.objects.all()
 
@@ -87,6 +95,13 @@ class ShoppingListAdd(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(shoppinglist=self.request.user.shoppinglist)
 
+
+class ShoppingListRemove(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSwapSerializer
+
+    def perform_update(self, serializer):
+        serializer.save(shoppinglist=None)
 
 class PantryRecipes(generics.ListAPIView):
     queryset = Pantry.objects.all()
