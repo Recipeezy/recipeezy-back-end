@@ -156,6 +156,10 @@ https://recipeezy-app.herokuapp.com/ingredients/1/swap/ <-- this new endpoint is
 
 https://recipeezy-app.herokuapp.com/recipe_history/1/add/  <-- this endpoint allows us to swap a recipe from being related to the Pantry container to being related to the Recipe History container. You just need to specify which recipe via the id. So in this case the "1" in the url path needs to be whatever id number of the recipe you want to move to the recipe history container.
 
+https://recipeezy-app.herokuapp.com/shopping_list/1/remove/  <-- This endpoint looks for the ingredient id, "1" in this case and then removes it's relationship to the shopping list. This way the object is not deleted but is taken out of the container.
+
+https://recipeezy-app.herokuapp.com/pantry/1/remove/  <-- This endpoint looks for the ingredient id, "1" in this case and then removes it's relationship to the pantry. This way the object is not deleted but is taken out of the container.
+
 ### DELETE requests
 
 https://recipeezy-app.herokuapp.com/ingredients/1/ <-- make sure you designate which ingredient object we are going to DELETE
