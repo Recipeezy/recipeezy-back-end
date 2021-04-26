@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from rest_framework import generics
-from .models import User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList
+from .models import User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList, RecipeHistory
 from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
 ShoppingListSerializer, IngredientInfoSerializer, RecipeCreateSerializer, PantryRecipesSerializer,
-RecipePantrySerializer, IngredientSwapSerializer)
+RecipePantrySerializer, IngredientSwapSerializer, RecipeHistorySerializer, RecipeSwapSerializer)
 
 
 class IngredientList(generics.ListCreateAPIView):
@@ -105,3 +105,23 @@ class PantryRecipeAdd(generics.RetrieveUpdateAPIView):
 
     def perform_update(self, serializer):
         serializer.save(pantry=self.request.user.pantry)
+
+
+class RecipeHistoryList(generics.ListAPIView):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeHistorySerializer
+
+    def get_queryset(self):
+        if self.request.user.id not in [rechist.user.id for rechist in RecipeHistory.objects.all()]:
+            RecipeHistory.objects.create(user=self.request.user)
+
+        return RecipeHistory.objects.filter(user=self.request.user)
+
+
+class RecipeHistoryAdd(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSwapSerializer
+
+    def perform_update(self, serializer):
+        serializer.save(recipe_history=self.request.user.recipehistory, pantry=None)
+
