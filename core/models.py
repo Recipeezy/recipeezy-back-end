@@ -38,6 +38,8 @@ class Recipe(models.Model):
     )
     pantry = models.ForeignKey(
         Pantry, on_delete=models.CASCADE, blank=True, null=True, related_name="pantry_recipes")
+    recipe_history = models.ForeignKey('RecipeHistory', on_delete=models.CASCADE,
+        blank=True, null=True, related_name='recipe_history')
     origin = models.CharField(max_length=100, null=True, blank=True)
     instructions = models.TextField(max_length=2500, null=True, blank=True)
     external_id = models.CharField(max_length=50, blank=True, null=True)
@@ -61,4 +63,11 @@ class ShoppingList(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.user.username
+        return f"{self.user.username}'s shopping list"
+
+
+class RecipeHistory(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.user.username}'s recipe history"
