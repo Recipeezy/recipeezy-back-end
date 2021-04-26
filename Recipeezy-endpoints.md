@@ -63,6 +63,8 @@ https://recipeezy-app.herokuapp.com/shopping_list/ <-- this works in a similar m
 
 https://recipeezy-app.herokuapp.com/ingredients/info/ <-- This show all the ingredients but also which containers they are currently related too.
 
+https://recipeezy-app.herokuapp.com/recipe_history/ <-- view the recipe history container for the logged in user. 
+
 ### POST requests
 
 https://recipeezy-app.herokuapp.com/pantry/add/ <-- this endpoint adds an ingredient straight into the pantry of the logged in user
@@ -151,6 +153,8 @@ https://recipeezy-app.herokuapp.com/ingredients/1/ <-- make sure you designate w
 https://recipeezy-app.herokuapp.com/pantry/recipes/1/add/ <-- This endpoint is taking a recipe and adding it directly to your pantry. That is to say the pantry of the logged in user. where you see the "1" should be the id of whichever recipe you are designating to go into the pantry. This will automatically make the recipe related to the logged in user, No need for any JSON input.
 
 https://recipeezy-app.herokuapp.com/ingredients/1/swap/ <-- this new endpoint is for the particular use of wanting to swap which containers the ingredient is related too. So per the usual you need to specifiy which ingredient with that "1" which is it's id but then you also need to add the "swap" at the end so that we can change more information about that object. This enpoint requires no additionally information. Just know that what it is doing is Making the ingredient attribute "shoppinglist = null" and making the attribute "pantry = logged in users pantry". 
+
+https://recipeezy-app.herokuapp.com/recipe_history/1/add/  <-- this endpoint allows us to swap a recipe from being related to the Pantry container to being related to the Recipe History container. You just need to specify which recipe via the id. So in this case the "1" in the url path needs to be whatever id number of the recipe you want to move to the recipe history container.
 
 ### DELETE requests
 
