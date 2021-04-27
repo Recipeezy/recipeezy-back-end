@@ -23,12 +23,12 @@ class IngredientSwapSerializer(serializers.ModelSerializer):
 
 
 class PantrySerializer(serializers.ModelSerializer):
-    ingredients_list = IngredientSerializer(many=True, read_only=True)
+    pantry_ingredients = IngredientSerializer(many=True, read_only=True)
     username = serializers.ReadOnlyField(source="user.username")
 
     class Meta:
         model = Pantry
-        fields = ['user', 'username', 'ingredients_list',]
+        fields = ['user', 'username', 'pantry_ingredients',]
 
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
@@ -60,11 +60,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ShoppingListSerializer(serializers.ModelSerializer):
-    shopping_list = IngredientSerializer(many=True, read_only=True)
+    shoppinglist_ingredients = IngredientSerializer(many=True, read_only=True)
 
     class Meta:
         model = ShoppingList
-        fields = ['id', 'shopping_list',]
+        fields = ['id', 'shoppinglist_ingredients',]
 
 
 class RecipeCreateSerializer(serializers.ModelSerializer):
