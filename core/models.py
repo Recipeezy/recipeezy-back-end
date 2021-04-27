@@ -18,10 +18,10 @@ class Pantry(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=100)
-    pantry = models.ForeignKey(
-        Pantry, on_delete=models.CASCADE, null=True, blank=True, related_name="pantry_ingredients")
-    shoppinglist = models.ForeignKey(
-        'ShoppingList', on_delete=models.CASCADE, null=True, blank=True, related_name="shoppinglist_ingredients")
+    pantry = models.ManyToManyField(
+        Pantry, null=True, blank=True, related_name="pantry_ingredients")
+    shoppinglist = models.ManyToManyField(
+        'ShoppingList', null=True, blank=True, related_name="shoppinglist_ingredients")
 
     def __str__(self):
         return self.name
@@ -43,7 +43,7 @@ class Recipe(models.Model):
     origin = models.CharField(max_length=100, null=True, blank=True)
     instructions = models.TextField(max_length=2500, null=True, blank=True)
     external_id = models.CharField(max_length=50, blank=True, null=True)
-
+    
     def __str__(self):
         return self.title
 

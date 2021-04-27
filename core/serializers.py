@@ -8,6 +8,7 @@ class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = ['id', 'name',]
+        validators = []
 
 
 class IngredientInfoSerializer(serializers.ModelSerializer):
@@ -67,24 +68,21 @@ class ShoppingListSerializer(serializers.ModelSerializer):
         fields = ['id', 'shoppinglist_ingredients',]
 
 
-class RecipeCreateSerializer(serializers.ModelSerializer):
+class RecipePopulateSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(many=True)
     
     class Meta:
         model = Recipe
         fields = ['id', 'title', 'category', 'origin', 'instructions', 
             'ingredients', 'selectedrecipes',]
-    
-    # def update(self, instance, validated_data):
 
-
-    # def create(self, validated_data):
-    #     ingredients_data = validated_data.pop('ingredients')
-    #     recipe = Recipe.objects.create(**validated_data)
-    #     for ingredient_data in ingredients_data:
-    #         ingredient = Ingredient.objects.create(name=ingredient_data['name'])
-    #         recipe.ingredients.add(ingredient)
-    #     return recipe
+    def create(self, validated_data):
+        ingredients_data = validated_data.pop('ingredients')
+        recipe = Recipe.objects.create(**validated_data)
+        for ingredient_data in ingredients_data:
+            ingredient, created = Ingredient.objects.get_or_create(name=ingredient_data['name'])
+            recipe.ingredients.add(ingredient)
+        return recipe
 
 
 class RecipeHistorySerializer(serializers.ModelSerializer):

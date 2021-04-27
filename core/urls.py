@@ -14,6 +14,7 @@ urlpatterns = [
     path('pantry/<int:pk>/remove/', views.PantryRemove.as_view(), name='pantry_remove'),
     path('recipes/', views.RecipeList.as_view(), name='recipes_list'),
     path('recipes/<int:pk>/', views.RecipeDetail.as_view(), name='recipe_detail'),
+    path('recipes/populate/', views.RecipePopulate.as_view(), name='recipe_populate'),
     path('shopping_list/', views.ShoppingListDetail.as_view(), name='shoppinglist_detail'),
     path('shopping_list/add/', views.ShoppingListAdd.as_view(), name='shoppinglist_add'),
     path('shopping_list/<int:pk>/remove/', views.ShoppingListRemove.as_view(), name='shoppinglist_remove'),
