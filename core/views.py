@@ -1,9 +1,10 @@
 from django.shortcuts import render, get_object_or_404
-from rest_framework import generics
+from rest_framework import generics, viewsets
+from rest_framework.exceptions import ValidationError
 from .models import (User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList, 
 RecipeHistory, SelectedRecipes)
 from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
-ShoppingListSerializer, IngredientInfoSerializer, RecipeCreateSerializer, IngredientSwapSerializer, 
+ShoppingListSerializer, IngredientInfoSerializer, RecipePopulateSerializer, IngredientSwapSerializer, 
 RecipeHistorySerializer, RecipeSwapSerializer, SelectedRecipesSerializer, SelectedRecipesSwapSerializer)
 
 
@@ -61,23 +62,33 @@ class RecipeList(generics.ListCreateAPIView):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
 
-    # def get_serializer_class(self):
-    #     if self.request.method == 'POST':
-    #         return RecipeCreateSerializer
-    #     return RecipeSerializer
+    def perform_create(self, serializer):
+        serializer.save(selectedrecipes=self.request.user.selectedrecipes)
+
+
+class RecipePopulate(generics.ListCreateAPIView):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipePopulateSerializer
 
     def perform_create(self, serializer):
         serializer.save(selectedrecipes=self.request.user.selectedrecipes)
 
+    # def perform_update(self, serializer):
+    #     serializer.save(selectedrecipes=self.request.user.selectedrecipes)
+
+    # # def get_queryset(self):
+    # #     recipe_id = self.kwargs.get('recipe_id')
+    # #     recipe = get_object_or_404(Recipe, pk=recipe_id)
+    # #     return recipe
 
 class RecipeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
 
-    def get_serializer_class(self):
-        if self.request.method == 'PUT':
-            return RecipeCreateSerializer
-        return RecipeSerializer
+    # def get_serializer_class(self):
+    #     if self.request.method == 'PUT':
+    #         return RecipeCreateSerializer
+    #     return RecipeSerializer
 
 
 class UserList(generics.ListCreateAPIView):
