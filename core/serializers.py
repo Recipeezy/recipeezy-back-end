@@ -32,6 +32,22 @@ class PantrySerializer(serializers.ModelSerializer):
         fields = ['user', 'username', 'pantry_ingredients',]
 
 
+class PantryIngredientSerializer(serializers.ModelSerializer):
+    pantry_ingredients = IngredientSerializer(many=True)
+
+    class Meta:
+        model = Pantry
+        fields = ['pantry_ingredients',]
+
+    def create(self, validated_data):
+        pantry_ingredients_data = validated_data.pop('pantry_ingredients')
+        pantry = Ingredient.objects.create(**validated_data)
+        for pantry_ingredient_data in pantry_ingredients_data:
+            ingredient, created = Ingredient.objects.get_or_create(name=pantry_ingredients_data['name'])
+            pantry.pantry_ingredients.add(ingredient)
+        return pantry
+
+
 class RecipeIngredientSerializer(serializers.ModelSerializer):
     ingredient = serializers.ReadOnlyField(source="ingredient.name")
 

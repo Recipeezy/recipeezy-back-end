@@ -5,7 +5,8 @@ from .models import (User, Pantry, Recipe, RecipeIngredient, Ingredient, Shoppin
 RecipeHistory, SelectedRecipes)
 from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
 ShoppingListSerializer, IngredientInfoSerializer, RecipePopulateSerializer, IngredientSwapSerializer, 
-RecipeHistorySerializer, RecipeSwapSerializer, SelectedRecipesSerializer, SelectedRecipesSwapSerializer)
+RecipeHistorySerializer, RecipeSwapSerializer, SelectedRecipesSerializer, SelectedRecipesSwapSerializer,
+PantryIngredientSerializer)
 
 
 class IngredientList(generics.ListCreateAPIView):
@@ -44,10 +45,7 @@ class PantryList(generics.ListCreateAPIView):
 
 class PantryAdd(generics.ListCreateAPIView):
     queryset = Ingredient.objects.all()
-    serializer_class = IngredientInfoSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(pantry=self.request.user.pantry)
+    serializer_class = PantryIngredientSerializer
 
 
 class PantryRemove(generics.RetrieveUpdateDestroyAPIView):
