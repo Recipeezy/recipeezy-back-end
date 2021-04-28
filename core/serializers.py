@@ -99,7 +99,6 @@ class ShoppingListIngredientSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         ingredients_data = validated_data.pop('ingredients')
-        breakpoint()
         shoppinglist = ShoppingList.objects.get(**validated_data)
         for ingredient_data in ingredients_data:
             name, created = Ingredient.objects.get_or_create(name=ingredient_data['name'].lower())
@@ -110,7 +109,6 @@ class ShoppingListIngredientSerializer(serializers.ModelSerializer):
 class RecipePopulateSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(many=True)
 
-    
     class Meta:
         model = Recipe
         fields = ['id', 'title', 'category', 'origin', 'instructions', 

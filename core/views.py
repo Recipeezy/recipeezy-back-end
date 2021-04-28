@@ -48,7 +48,7 @@ class PantryAdd(generics.ListCreateAPIView):
     serializer_class = PantryIngredientSerializer
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user.pantry.id)
 
 
 class PantryRemove(generics.RetrieveUpdateDestroyAPIView):
@@ -74,22 +74,10 @@ class RecipePopulate(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(selectedrecipes=self.request.user.selectedrecipes)
 
-    # def perform_update(self, serializer):
-    #     serializer.save(selectedrecipes=self.request.user.selectedrecipes)
-
-    # # def get_queryset(self):
-    # #     recipe_id = self.kwargs.get('recipe_id')
-    # #     recipe = get_object_or_404(Recipe, pk=recipe_id)
-    # #     return recipe
 
 class RecipeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-
-    # def get_serializer_class(self):
-    #     if self.request.method == 'PUT':
-    #         return RecipeCreateSerializer
-    #     return RecipeSerializer
 
 
 class UserList(generics.ListCreateAPIView):
@@ -112,7 +100,7 @@ class ShoppingListAdd(generics.ListCreateAPIView):
     serializer_class = ShoppingListIngredientSerializer
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user.shoppinglist.id)
 
 
 class ShoppingListRemove(generics.RetrieveUpdateDestroyAPIView):
