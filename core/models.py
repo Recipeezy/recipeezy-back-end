@@ -10,7 +10,7 @@ class User(AbstractUser):
 
 
 class Pantry(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_pantry')
     ingredients = models.ManyToManyField(
         'Ingredient', null=True, blank=True, related_name="pantry_ingredients")
 
@@ -60,7 +60,7 @@ class RecipeIngredient(models.Model):
 
 
 class ShoppingList(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_shoppinglist')
     ingredients = models.ManyToManyField(
         Ingredient, null=True, blank=True, related_name="shoppinglist_ingredients")
 
@@ -69,14 +69,14 @@ class ShoppingList(models.Model):
 
 
 class SelectedRecipes(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_recipes')
 
     def __str__(self):
         return self.user.id
 
 
 class RecipeHistory(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_recipehistory')
 
     def __str__(self):
         return self.user.id

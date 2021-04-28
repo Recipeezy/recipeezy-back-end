@@ -48,7 +48,7 @@ class PantryAdd(generics.ListCreateAPIView):
     serializer_class = PantryIngredientSerializer
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user.pantry.id)
+        serializer.save(user=self.request.user)
 
 
 class PantryRemove(generics.RetrieveUpdateDestroyAPIView):
@@ -100,7 +100,7 @@ class ShoppingListAdd(generics.ListCreateAPIView):
     serializer_class = ShoppingListIngredientSerializer
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user.shoppinglist.id)
+        serializer.save(user=self.request.user)
 
 
 class ShoppingListRemove(generics.RetrieveUpdateDestroyAPIView):
