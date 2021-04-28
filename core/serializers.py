@@ -49,7 +49,7 @@ class PantryIngredientSerializer(serializers.ModelSerializer):
         ingredients_data = validated_data.pop('ingredients')
         pantry = Pantry.objects.get(**validated_data)
         for ingredient_data in ingredients_data:
-            name, created = Ingredient.objects.get_or_create(name=ingredient_data['name'])
+            name, created = Ingredient.objects.get_or_create(name=ingredient_data['name'].lower())
             pantry.ingredients.add(name)
         return pantry
 
@@ -99,9 +99,10 @@ class ShoppingListIngredientSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         ingredients_data = validated_data.pop('ingredients')
+        breakpoint()
         shoppinglist = ShoppingList.objects.get(**validated_data)
         for ingredient_data in ingredients_data:
-            name, created = Ingredient.objects.get_or_create(name=ingredient_data['name'])
+            name, created = Ingredient.objects.get_or_create(name=ingredient_data['name'].lower())
             shoppinglist.ingredients.add(name)
         return shoppinglist
 
@@ -119,7 +120,7 @@ class RecipePopulateSerializer(serializers.ModelSerializer):
         ingredients_data = validated_data.pop('ingredients')
         recipe = Recipe.objects.create(**validated_data)
         for ingredient_data in ingredients_data:
-            ingredient, created = Ingredient.objects.get_or_create(name=ingredient_data['name'], measurement=ingredient_data['measurement'])
+            ingredient, created = Ingredient.objects.get_or_create(name=ingredient_data['name'].lower())
             recipe.ingredients.add(ingredient)
         return recipe
 
