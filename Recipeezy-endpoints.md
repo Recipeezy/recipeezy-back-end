@@ -200,7 +200,9 @@ THIS ENDPOINT IS NOT WORKING RIGHT NOW
 
 https://recipeezy-app.herokuapp.com/ingredients/1/swap/ <-- this new endpoint is for the particular use of wanting to swap which containers the ingredient is related too. So per the usual you need to specifiy which ingredient with that "1" which is it's id but then you also need to add the "swap" at the end so that we can change more information about that object. This enpoint requires no additionally information. Just know that what it is doing is Making the ingredient attribute "shoppinglist = null" and making the attribute "pantry = logged in users pantry". 
 
-https://recipeezy-app.herokuapp.com/recipe_history/1/add/  <-- this endpoint allows us to swap a recipe from being related to the Pantry container to being related to the Recipe History container. You just need to specify which recipe via the id. So in this case the "1" in the url path needs to be whatever id number of the recipe you want to move to the recipe history container.
+https://recipeezy-app.herokuapp.com/recipe_history/1/add/  <-- this endpoint allows us to swap a recipe from being related to the Selected Recipes container to being related to the Recipe History container. You just need to specify which recipe via the id. So in this case the "1" in the url path needs to be whatever id number of the recipe you want to move to the recipe history container.
+
+https://recipeezy-app.herokuapp.com/selected_recipes/1/add/ <-- this endpoint allows us to swap a recipe from being related to the recipe history container to being related to the Selected Recipes container. You just need to specify which recipe via the id. So in this case the "1" in the url path needs to be whatever id number of the recipe you want to move to the recipe Selected Recipes.
 
 THIS ENDPOINT IS NOT WORKING RIGHT NOW
 
