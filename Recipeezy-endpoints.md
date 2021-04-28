@@ -65,33 +65,75 @@ https://recipeezy-app.herokuapp.com/ingredients/info/ <-- This show all the ingr
 
 https://recipeezy-app.herokuapp.com/recipe_history/ <-- view the recipe history container for the logged in user. 
 
+https://recipeezy-app.herokuapp.com/selected_recipes/ <-- view the selected recipes container for the logged in user
+
 ### POST requests
 
-https://recipeezy-app.herokuapp.com/pantry/add/ <-- this endpoint adds an ingredient straight into the pantry of the logged in user
+https://recipeezy-app.herokuapp.com/pantry/add/ <-- this endpoint adds an ingredient straight into the pantry of the logged in user. If that ingredient exists already it will make it related to this users pantry instead of creating a brand model. Can add multiple ingredients at once
+
+Ex: "ingredients: [   {   "name":  "potato"   }     ]". Even if only adding one ingredient it needs to be wrapped in square brackets to make it a list.
 
 ```JSON
 # input
 {
-  "name": "Ham"
+	"ingredients": [
+		{
+			"name": "ham"
+		}
+	]
 }
 # output
 # 201
-{
-  "name": "Ham"
+{                # This is the pantry you added the ingredient too
+  "id": 1,
+  "ingredients": [
+    {
+      "id": 1,
+      "name": "chicken"
+    },
+    {
+      "id": 3,
+      "name": "peas"
+    },
+    {
+      "id": 12,
+      "name": "ham"
+    }
+  ]
 }
 ```
 
-https://recipeezy-app.herokuapp.com/shopping_list/add/ <-- this endpoint adds an ingredient to the logged in users Shopping list
+https://recipeezy-app.herokuapp.com/shopping_list/add/ <-- this endpoint adds an ingredient straight into the shopping list of the logged in user. If that ingredient exists already it will make it related to this users shopping list instead of creating a brand model. Can add multiple ingredients at once
+
+Ex: "ingredients: [   {   "name":  "potato"   }     ]". Even if only adding one ingredient it needs to be wrapped in square brackets to make it a list.
 
 ```JSON
 # input
 {
-  "name": "Juice"
+	"ingredients": [
+		{
+			"name": "juice"
+		}
+	]
 }
 # output
 # 201
-{
-  "name": "Juice"
+{                # This is the shopping list you added the ingredient too
+  "id": 1,
+  "ingredients": [
+    {
+      "id": 1,
+      "name": "chicken"
+    },
+    {
+      "id": 3,
+      "name": "peas"
+    },
+    {
+      "id": 14,
+      "name": "juice"
+    }
+  ]
 }
 ```
 
@@ -136,7 +178,9 @@ Ex: "ingredients: [   {   "name":  "potato"   }     ]". Even if only adding one 
 
 ### PUT requests
 
-https://recipeezy-app.herokuapp.com/ingredients/1/ <-- make sure you designate which ingredient object we are going to PATCH
+THIS ENDPOINT IS NOT WORKING RIGHT NOW
+
+https://recipeezy-app.herokuapp.com/ingredients/1/ <-- make sure you designate which ingredient object we are going to PUT            
 
 ```JSON
 # input
@@ -152,11 +196,17 @@ https://recipeezy-app.herokuapp.com/ingredients/1/ <-- make sure you designate w
 
 https://recipeezy-app.herokuapp.com/pantry/recipes/1/add/ <-- This endpoint is taking a recipe and adding it directly to your pantry. That is to say the pantry of the logged in user. where you see the "1" should be the id of whichever recipe you are designating to go into the pantry. This will automatically make the recipe related to the logged in user, No need for any JSON input.
 
+THIS ENDPOINT IS NOT WORKING RIGHT NOW
+
 https://recipeezy-app.herokuapp.com/ingredients/1/swap/ <-- this new endpoint is for the particular use of wanting to swap which containers the ingredient is related too. So per the usual you need to specifiy which ingredient with that "1" which is it's id but then you also need to add the "swap" at the end so that we can change more information about that object. This enpoint requires no additionally information. Just know that what it is doing is Making the ingredient attribute "shoppinglist = null" and making the attribute "pantry = logged in users pantry". 
 
 https://recipeezy-app.herokuapp.com/recipe_history/1/add/  <-- this endpoint allows us to swap a recipe from being related to the Pantry container to being related to the Recipe History container. You just need to specify which recipe via the id. So in this case the "1" in the url path needs to be whatever id number of the recipe you want to move to the recipe history container.
 
+THIS ENDPOINT IS NOT WORKING RIGHT NOW
+
 https://recipeezy-app.herokuapp.com/shopping_list/1/remove/  <-- This endpoint looks for the ingredient id, "1" in this case and then removes it's relationship to the shopping list. This way the object is not deleted but is taken out of the container.
+
+THIS ENDPOINT IS NOT WORKING RIGHT NOW
 
 https://recipeezy-app.herokuapp.com/pantry/1/remove/  <-- This endpoint looks for the ingredient id, "1" in this case and then removes it's relationship to the pantry. This way the object is not deleted but is taken out of the container.
 
