@@ -85,7 +85,7 @@ class UserList(generics.ListCreateAPIView):
     serializer_class = UserSerializer
 
 
-class ShoppingListDetail(generics.ListAPIView):
+class ShoppingListDetail(generics.ListCreateAPIView):
     queryset = ShoppingList.objects.all()
     serializer_class = ShoppingListSerializer
 
