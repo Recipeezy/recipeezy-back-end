@@ -40,14 +40,15 @@ class PantrySerializer(serializers.ModelSerializer):
 
 class PantryIngredientSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(many=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Pantry
-        fields = ['id', 'ingredients',]
+        fields = ['id', 'user', 'ingredients',]
 
     def create(self, validated_data):
         ingredients_data = validated_data.pop('ingredients')
-        pantry = Pantry.objects.get(**validated_data)
+        pantry = Pantry.objects.get(user=validated_data['user'])
         for ingredient_data in ingredients_data:
             name, created = Ingredient.objects.get_or_create(name=ingredient_data['name'].lower())
             pantry.ingredients.add(name)
@@ -93,10 +94,11 @@ class ShoppingListSerializer(serializers.ModelSerializer):
 
 class ShoppingListIngredientSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(many=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = ShoppingList
-        fields = ['id', 'ingredients']
+        fields = ['id', 'user', 'ingredients']
 
     def create(self, validated_data):
         ingredients_data = validated_data.pop('ingredients')
