@@ -65,18 +65,18 @@ class ShoppingList(models.Model):
         Ingredient, null=True, blank=True, related_name="shoppinglist_ingredients")
 
     def __str__(self):
-        return f"{self.user.username}'s shopping list"
+        return self.user.username
 
 
 class SelectedRecipes(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.user.username}'s selected recipes"
+        return self.user.username
 
 
 class RecipeHistory(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.user.username}'s recipe history"
+        return self.user.username
