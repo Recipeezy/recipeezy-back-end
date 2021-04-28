@@ -11,6 +11,8 @@ class User(AbstractUser):
 
 class Pantry(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    ingredients = models.ManyToManyField(
+        'Ingredient', null=True, blank=True, related_name="pantry_ingredients")
 
     def __str__(self):
         return self.user.username
@@ -18,10 +20,6 @@ class Pantry(models.Model):
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=100)
-    pantry = models.ManyToManyField(
-        Pantry, null=True, blank=True, related_name="pantry_ingredients")
-    shoppinglist = models.ManyToManyField(
-        'ShoppingList', null=True, blank=True, related_name="shoppinglist_ingredients")
 
     def __str__(self):
         return self.name
@@ -43,6 +41,8 @@ class Recipe(models.Model):
     origin = models.CharField(max_length=100, null=True, blank=True)
     instructions = models.TextField(max_length=2500, null=True, blank=True)
     external_id = models.CharField(max_length=50, blank=True, null=True)
+    img_id = models.CharField(max_length=150, null=True, blank=True)
+    video_id = models.CharField(max_length=150, null=True, blank=True)
     
     def __str__(self):
         return self.title
@@ -61,6 +61,8 @@ class RecipeIngredient(models.Model):
 
 class ShoppingList(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    ingredients = models.ManyToManyField(
+        Ingredient, null=True, blank=True, related_name="shoppinglist_ingredients")
 
     def __str__(self):
         return f"{self.user.username}'s shopping list"
