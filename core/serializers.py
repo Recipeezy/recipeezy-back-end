@@ -84,10 +84,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ShoppingListSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(many=True, read_only=True)
+    username = serializers.ReadOnlyField(source="user.username")
 
     class Meta:
         model = ShoppingList
-        fields = ['id', 'ingredients',]
+        fields = ['user', 'username', 'ingredients',]
 
 
 class ShoppingListIngredientSerializer(serializers.ModelSerializer):
@@ -128,7 +129,7 @@ class RecipeHistorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RecipeHistory
-        fields = ['id', 'recipe_history',]
+        fields = ['id', 'user', 'recipe_history',]
 
 
 class RecipeSwapSerializer(serializers.ModelSerializer):
@@ -142,7 +143,7 @@ class SelectedRecipesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SelectedRecipes
-        fields = ['id', 'selected_recipes',]
+        fields = ['id', 'user', 'selected_recipes',]
 
 
 class SelectedRecipesSwapSerializer(serializers.ModelSerializer):
