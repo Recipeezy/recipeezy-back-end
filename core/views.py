@@ -86,7 +86,7 @@ class UserList(generics.ListCreateAPIView):
 
 
 class ShoppingListDetail(generics.ListAPIView):
-    queryset = Ingredient.objects.all()
+    queryset = ShoppingList.objects.all()
     serializer_class = ShoppingListSerializer
 
     def get_queryset(self):
