@@ -4,6 +4,12 @@ from .models import (User, Pantry, Recipe, RecipeIngredient, Ingredient, Shoppin
 RecipeHistory, SelectedRecipes)
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username',]
+
+
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
@@ -14,37 +20,37 @@ class IngredientSerializer(serializers.ModelSerializer):
 class IngredientInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ['id', 'name', 'pantry', 'shoppinglist',]
+        fields = ['id', 'name', 'pantry_ingredients', 'shoppinglist_ingredients',]
 
 
 class IngredientSwapSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ['id', 'pantry', 'shoppinglist',]
+        fields = ['id', 'pantry_ingredients', 'shoppinglist_ingredients',]
 
 
 class PantrySerializer(serializers.ModelSerializer):
-    pantry_ingredients = IngredientSerializer(many=True, read_only=True)
+    ingredients = IngredientSerializer(many=True, read_only=True)
     username = serializers.ReadOnlyField(source="user.username")
 
     class Meta:
         model = Pantry
-        fields = ['user', 'username', 'pantry_ingredients',]
+        fields = ['user', 'username', 'ingredients',]
 
 
 class PantryIngredientSerializer(serializers.ModelSerializer):
-    pantry_ingredients = IngredientSerializer(many=True)
+    ingredients = IngredientSerializer(many=True)
 
     class Meta:
         model = Pantry
-        fields = ['pantry_ingredients',]
+        fields = ['id', 'ingredients',]
 
     def create(self, validated_data):
-        pantry_ingredients_data = validated_data.pop('pantry_ingredients')
-        pantry = Ingredient.objects.create(**validated_data)
-        for pantry_ingredient_data in pantry_ingredients_data:
-            ingredient, created = Ingredient.objects.get_or_create(name=pantry_ingredients_data['name'])
-            pantry.pantry_ingredients.add(ingredient)
+        ingredients_data = validated_data.pop('ingredients')
+        pantry = Pantry.objects.get(**validated_data)
+        for ingredient_data in ingredients_data:
+            name, created = Ingredient.objects.get_or_create(name=ingredient_data['name'])
+            pantry.ingredients.add(name)
         return pantry
 
 
@@ -77,15 +83,32 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class ShoppingListSerializer(serializers.ModelSerializer):
-    shoppinglist_ingredients = IngredientSerializer(many=True, read_only=True)
+    ingredients = IngredientSerializer(many=True, read_only=True)
 
     class Meta:
         model = ShoppingList
-        fields = ['id', 'shoppinglist_ingredients',]
+        fields = ['id', 'ingredients',]
+
+
+class ShoppingListIngredientSerializer(serializers.ModelSerializer):
+    ingredients = IngredientSerializer(many=True)
+
+    class Meta:
+        model = ShoppingList
+        fields = ['id', 'ingredients']
+
+    def create(self, validated_data):
+        ingredients_data = validated_data.pop('ingredients')
+        shoppinglist = ShoppingList.objects.get(**validated_data)
+        for ingredient_data in ingredients_data:
+            name, created = Ingredient.objects.get_or_create(name=ingredient_data['name'])
+            shoppinglist.ingredients.add(name)
+        return shoppinglist
 
 
 class RecipePopulateSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(many=True)
+
     
     class Meta:
         model = Recipe
@@ -96,7 +119,7 @@ class RecipePopulateSerializer(serializers.ModelSerializer):
         ingredients_data = validated_data.pop('ingredients')
         recipe = Recipe.objects.create(**validated_data)
         for ingredient_data in ingredients_data:
-            ingredient, created = Ingredient.objects.get_or_create(name=ingredient_data['name'])
+            ingredient, created = Ingredient.objects.get_or_create(name=ingredient_data['name'], measurement=ingredient_data['measurement'])
             recipe.ingredients.add(ingredient)
         return recipe
 
