@@ -35,7 +35,7 @@ class IngredientContainerSwap(generics.RetrieveUpdateDestroyAPIView):
 
 class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ingredient.objects.all()
-    serializer_class = IngredientInfoSerializer
+    serializer_class = IngredientSerializer
 
 
 class PantryList(generics.ListCreateAPIView):
