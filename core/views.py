@@ -72,7 +72,8 @@ class RecipePopulate(generics.ListCreateAPIView):
     serializer_class = RecipePopulateSerializer
 
     def perform_create(self, serializer):
-        serializer.save(selectedrecipes=self.request.user.selectedrecipes)
+        selectedrecipes = SelectedRecipes.objects.get(user=self.request.user)
+        serializer.save(selectedrecipes=selectedrecipes)
 
 
 class RecipeDetail(generics.RetrieveUpdateDestroyAPIView):
