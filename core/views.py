@@ -63,8 +63,14 @@ class RecipeList(generics.ListCreateAPIView):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
 
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return RecipePopulateSerializer
+        return RecipeSerializer
+
     def perform_create(self, serializer):
-        serializer.save(selectedrecipes=self.request.user.selectedrecipes)
+        selectedrecipes = SelectedRecipes.objects.get(user=self.request.user)
+        serializer.save(selectedrecipes=selectedrecipes)
 
 
 class RecipePopulate(generics.ListCreateAPIView):

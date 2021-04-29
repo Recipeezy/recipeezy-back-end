@@ -70,8 +70,8 @@ class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = [
-            'id', 'external_id', 'title', 'category', 'origin', 'instructions', 'selectedrecipes',
-                'recipe_history', 'recipe_ingredients', 'ingredients'
+            'id', 'external_id', 'title', 'category', 'origin', 'instructions', 'img_id', 'video_id', 'selectedrecipes',
+                'recipe_history', 'recipe_ingredients', 'ingredients',
         ]
 
 
@@ -114,7 +114,7 @@ class RecipePopulateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Recipe
-        fields = ['id', 'title', 'category', 'origin', 'instructions', 
+        fields = ['id', 'title', 'category', 'origin', 'instructions', 'img_id', 'video_id',
             'ingredients', 'selectedrecipes',]
 
     def create(self, validated_data):
