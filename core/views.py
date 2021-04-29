@@ -5,8 +5,9 @@ from .models import (User, Pantry, Recipe, RecipeIngredient, Ingredient, Shoppin
 RecipeHistory, SelectedRecipes)
 from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
 ShoppingListSerializer, IngredientInfoSerializer, RecipePopulateSerializer, IngredientSwapSerializer, 
-RecipeHistorySerializer, RecipeSwapSerializer, SelectedRecipesSerializer, SelectedRecipesSwapSerializer,
-PantryIngredientSerializer, ShoppingListIngredientSerializer, UserSerializer, ShoppingListSwapSerializer)
+RecipeHistorySerializer, RecipeSwapSerializer, SelectedRecipesSerializer, PantryIngredientSerializer,
+ShoppingListIngredientSerializer, UserSerializer, ShoppingListSwapSerializer, 
+ShoppingListMoveArraySerializer)
 
 
 class IngredientList(generics.ListCreateAPIView):
@@ -45,17 +46,9 @@ class IngredientToShopList(generics.RetrieveUpdateDestroyAPIView):
         ingredient.save()
 
 
-class IngredientSwapAll(generics.RetrieveUpdateDestroyAPIView):
+class IngredientSwapAll(generics.ListCreateAPIView):
     queryset = ShoppingList.objects.all()
-    serializer_class = ShoppingListSwapSerializer
-
-    def perform_update(self, serializer):
-        pantry = Pantry.objects.get(user=self.request.user)
-        shoppinglist = ShoppingList.objects.get(user=self.request.user)
-        ingredient = serializer.save()
-        pantry.ingredients.add(ingredient)
-        shoppinglist.ingredients.remove(ingredient)
-        ingredient.save()
+    serializer_class = ShoppingListMoveArraySerializer
 
 
 class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -67,16 +60,16 @@ class PantryList(generics.ListCreateAPIView):
     queryset = Pantry.objects.all()
     serializer_class = PantrySerializer
 
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return PantryIngredientSerializer
+        return PantrySerializer
+
     def get_queryset(self):
         if self.request.user.id not in [pantry.user.id for pantry in Pantry.objects.all()]:
             Pantry.objects.create(user=self.request.user)
 
         return Pantry.objects.filter(user=self.request.user)
-
-
-class PantryAdd(generics.ListCreateAPIView):
-    queryset = Ingredient.objects.all()
-    serializer_class = PantryIngredientSerializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -107,15 +100,6 @@ class RecipeList(generics.ListCreateAPIView):
         serializer.save(selectedrecipes=selectedrecipes)
 
 
-class RecipePopulate(generics.ListCreateAPIView):
-    queryset = Recipe.objects.all()
-    serializer_class = RecipePopulateSerializer
-
-    def perform_create(self, serializer):
-        selectedrecipes = SelectedRecipes.objects.get(user=self.request.user)
-        serializer.save(selectedrecipes=selectedrecipes)
-
-
 class RecipeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
@@ -130,15 +114,16 @@ class ShoppingListDetail(generics.ListCreateAPIView):
     queryset = ShoppingList.objects.all()
     serializer_class = ShoppingListSerializer
 
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return ShoppingListIngredientSerializer
+        return ShoppingListSerializer
+
     def get_queryset(self):
         if self.request.user.id not in [shop.user.id for shop in ShoppingList.objects.all()]:
             ShoppingList.objects.create(user=self.request.user)
 
         return ShoppingList.objects.filter(user=self.request.user)
-
-class ShoppingListAdd(generics.ListCreateAPIView):
-    queryset = Ingredient.objects.all()
-    serializer_class = ShoppingListIngredientSerializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -188,7 +173,7 @@ class SelectedRecipesList(generics.ListAPIView):
 
 class SelectedRecipesAdd(generics.RetrieveUpdateDestroyAPIView):
     queryset = Recipe.objects.all()
-    serializer_class = SelectedRecipesSwapSerializer
+    serializer_class = RecipeSwapSerializer
 
     def perform_update(self, serializer):
         selectedrecipes = SelectedRecipes.objects.get(user=self.request.user)

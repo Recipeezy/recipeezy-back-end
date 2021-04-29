@@ -101,6 +101,25 @@ class ShoppingListSwapSerializer(serializers.ModelSerializer):
         fields = ['username', 'ingredients',]
 
 
+class ShoppingListMoveArraySerializer(serializers.ModelSerializer):
+    ingredients = serializers.ListField(child=serializers.CharField())
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = ShoppingList
+        fields = ['id', 'user', 'ingredients']
+
+    def create(self, validated_data):
+        ingredients_data = validated_data.pop('ingredients')
+        pantry = Pantry.objects.get(user=validated_data['user'])
+        shoppinglist = ShoppingList.objects.get(user=validated_data['user'])
+        for ingredient_data in ingredients_data:
+            name, created = Ingredient.objects.get_or_create(name=ingredient_data.lower())
+            pantry.ingredients.add(name)
+            shoppinglist.ingredients.remove(name)
+        return shoppinglist
+
+
 class ShoppingListIngredientSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(many=True)
     user = UserSerializer(read_only=True)
@@ -135,6 +154,12 @@ class RecipePopulateSerializer(serializers.ModelSerializer):
         return recipe
 
 
+class RecipeSwapSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Recipe
+        fields = ['id', 'selectedrecipes', 'recipe_history',]
+
+
 class RecipeHistorySerializer(serializers.ModelSerializer):
     recipe_history = RecipeSerializer(many=True, read_only=True)
 
@@ -143,21 +168,9 @@ class RecipeHistorySerializer(serializers.ModelSerializer):
         fields = ['id', 'user', 'recipe_history',]
 
 
-class RecipeSwapSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Recipe
-        fields = ['id', 'selectedrecipes', 'recipe_history',]
-
-
 class SelectedRecipesSerializer(serializers.ModelSerializer):
     selected_recipes = RecipeSerializer(many=True, read_only=True)
 
     class Meta:
         model = SelectedRecipes
         fields = ['id', 'user', 'selected_recipes',]
-
-
-class SelectedRecipesSwapSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Recipe
-        fields = ['id', 'selectedrecipes', 'recipe_history',]
