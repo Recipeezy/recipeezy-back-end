@@ -6,7 +6,7 @@ RecipeHistory, SelectedRecipes)
 from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
 ShoppingListSerializer, IngredientInfoSerializer, RecipePopulateSerializer, IngredientSwapSerializer, 
 RecipeHistorySerializer, RecipeSwapSerializer, SelectedRecipesSerializer, SelectedRecipesSwapSerializer,
-PantryIngredientSerializer, ShoppingListIngredientSerializer, UserSerializer)
+PantryIngredientSerializer, ShoppingListIngredientSerializer, UserSerializer, ShoppingListSwapSerializer)
 
 
 class IngredientList(generics.ListCreateAPIView):
@@ -19,9 +19,35 @@ class IngredientInfoList(generics.ListAPIView):
     serializer_class = IngredientInfoSerializer
 
 
-class IngredientContainerSwap(generics.RetrieveUpdateDestroyAPIView):
+class IngredientToPantry(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSwapSerializer
+
+    def perform_update(self, serializer):
+        pantry = Pantry.objects.get(user=self.request.user)
+        shoppinglist = ShoppingList.objects.get(user=self.request.user)
+        ingredient = serializer.save()
+        pantry.ingredients.add(ingredient)
+        shoppinglist.ingredients.remove(ingredient)
+        ingredient.save()
+
+
+class IngredientToShopList(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSwapSerializer
+
+    def perform_update(self, serializer):
+        pantry = Pantry.objects.get(user=self.request.user)
+        shoppinglist = ShoppingList.objects.get(user=self.request.user)
+        ingredient = serializer.save()
+        shoppinglist.ingredients.add(ingredient)
+        pantry.ingredients.remove(ingredient)
+        ingredient.save()
+
+
+class IngredientSwapAll(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ShoppingList.objects.all()
+    serializer_class = ShoppingListSwapSerializer
 
     def perform_update(self, serializer):
         pantry = Pantry.objects.get(user=self.request.user)

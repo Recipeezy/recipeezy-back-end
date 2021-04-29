@@ -92,6 +92,15 @@ class ShoppingListSerializer(serializers.ModelSerializer):
         fields = ['user', 'username', 'ingredients',]
 
 
+class ShoppingListSwapSerializer(serializers.ModelSerializer):
+    ingredients = IngredientSwapSerializer(many=True)
+    username = serializers.ReadOnlyField(source="user.username")
+
+    class Meta:
+        model = ShoppingList
+        fields = ['username', 'ingredients',]
+
+
 class ShoppingListIngredientSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(many=True)
     user = UserSerializer(read_only=True)
