@@ -24,7 +24,13 @@ class IngredientContainerSwap(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = IngredientSwapSerializer
 
     def perform_update(self, serializer):
-        serializer.save(pantry_ingredients=self.request.user.pantry, shoppinglist_ingredients=None)
+        pantry = Pantry.objects.get(user=self.request.user)
+        shoppinglist = ShoppingList.objects.get(user=self.request.user)
+        ingredient = serializer.save()
+        pantry.ingredients.add(ingredient)
+        shoppinglist.ingredients.remove(ingredient)
+        ingredient.save()
+
 
 
 class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -56,7 +62,10 @@ class PantryRemove(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = IngredientSwapSerializer
 
     def perform_update(self, serializer):
-        serializer.save(pantry=None)
+        pantry = Pantry.objects.get(user=self.request.user)
+        ingredient = serializer.save()
+        pantry.ingredients.remove(ingredient)
+        ingredient.save()
 
 
 class RecipeList(generics.ListCreateAPIView):
@@ -64,7 +73,7 @@ class RecipeList(generics.ListCreateAPIView):
     serializer_class = RecipeSerializer
 
     def get_serializer_class(self):
-        if self.request.method == "POST":
+        if self.method == "POST":
             return RecipePopulateSerializer
         return RecipeSerializer
 
@@ -115,7 +124,10 @@ class ShoppingListRemove(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = IngredientSwapSerializer
 
     def perform_update(self, serializer):
-        serializer.save(shoppinglist=None)
+        shoppinglist = ShoppingList.objects.get(user=self.request.user)
+        ingredient = serializer.save()
+        shoppinglist.ingredients.remove(ingredient)
+        ingredient.save()
 
 
 class RecipeHistoryList(generics.ListAPIView):
