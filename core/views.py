@@ -32,7 +32,6 @@ class IngredientContainerSwap(generics.RetrieveUpdateDestroyAPIView):
         ingredient.save()
 
 
-
 class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
@@ -146,7 +145,8 @@ class RecipeHistoryAdd(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = RecipeSwapSerializer
 
     def perform_update(self, serializer):
-        serializer.save(recipe_history=self.request.user.recipehistory, selectedrecipes=None)
+        recipehistory = RecipeHistory.objects.get(user=self.request.user)
+        serializer.save(recipe_history=recipehistory, selectedrecipes=None)
 
 
 class SelectedRecipesList(generics.ListAPIView):
@@ -165,5 +165,5 @@ class SelectedRecipesAdd(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SelectedRecipesSwapSerializer
 
     def perform_update(self, serializer):
-        serializer.save(selectedrecipes=self.request.user.selectedrecipes, recipe_history=None)
-
+        selectedrecipes = SelectedRecipes.objects.get(user=self.request.user)
+        serializer.save(selectedrecipes=selectedrecipes, recipe_history=None)
