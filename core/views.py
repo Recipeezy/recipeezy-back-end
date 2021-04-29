@@ -73,7 +73,7 @@ class RecipeList(generics.ListCreateAPIView):
     serializer_class = RecipeSerializer
 
     def get_serializer_class(self):
-        if self.method == "POST":
+        if self.request.method == "POST":
             return RecipePopulateSerializer
         return RecipeSerializer
 
