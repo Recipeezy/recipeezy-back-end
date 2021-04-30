@@ -69,7 +69,7 @@ https://recipeezy-app.herokuapp.com/selected_recipes/ <-- view the selected reci
 
 ### POST requests
 
-https://recipeezy-app.herokuapp.com/pantry/add/ <-- this endpoint adds an ingredient straight into the pantry of the logged in user. If that ingredient exists already it will make it related to this users pantry instead of creating a brand model. Can add multiple ingredients at once
+https://recipeezy-app.herokuapp.com/pantry/ <-- this endpoint adds an ingredient straight into the pantry of the logged in user. If that ingredient exists already it will make it related to this users pantry instead of creating a brand model. Can add multiple ingredients at once
 
 Ex: "ingredients: [   {   "name":  "potato"   }     ]". Even if only adding one ingredient it needs to be wrapped in square brackets to make it a list.
 
@@ -103,7 +103,7 @@ Ex: "ingredients: [   {   "name":  "potato"   }     ]". Even if only adding one 
 }
 ```
 
-https://recipeezy-app.herokuapp.com/shopping_list/add/ <-- this endpoint adds an ingredient straight into the shopping list of the logged in user. If that ingredient exists already it will make it related to this users shopping list instead of creating a brand model. Can add multiple ingredients at once
+https://recipeezy-app.herokuapp.com/shopping_list/ <-- this endpoint adds an ingredient straight into the shopping list of the logged in user. If that ingredient exists already it will make it related to this users shopping list instead of creating a brand model. Can add multiple ingredients at once
 
 Ex: "ingredients: [   {   "name":  "potato"   }     ]". Even if only adding one ingredient it needs to be wrapped in square brackets to make it a list.
 
@@ -174,11 +174,22 @@ Ex: "ingredients: [   {   "name":  "potato"   }     ]". Even if only adding one 
 }
 ```
 
+THIS ENDPOINT HALF WORKS. BEWARE USING, FUNCTIONS BUT THROWS AN ERROR
+
+https://recipeezy-app.herokuapp.com/ingredients/swap_all/  <-- This endpoint will require a bit of data and will act sort of like a normal POST request. We will also be structing the data slightly different with this case then usual. Notice we will wrap this one up as an array of items. 
+
+```JSON
+{
+  "ingredients":
+  ["ham", "cheese", "apples"]
+}
+```
+
 
 
 ### PUT requests
 
-https://recipeezy-app.herokuapp.com/ingredients/1/ <-- make sure you designate which ingredient object we are going to PUT            
+https://recipeezy-app.herokuapp.com/ingredients/1/ <-- make sure you designate which ingredient object we are going to edit. Change it's name here using the PUT request         
 
 ```JSON
 # input
@@ -198,11 +209,13 @@ https://recipeezy-app.herokuapp.com/selected_recipes/1/ <-- this endpoint allows
 
 ### PATCH requests
 
-https://recipeezy-app.herokuapp.com/ingredients/1/swap/ <-- this new endpoint is for the particular use of wanting to swap which containers the ingredient is related too. So per the usual you need to specifiy which ingredient with that "1" which is it's id but then you also need to add the "swap" at the end so that we can change more information about that object. This enpoint requires no additionally information. Just know that what it is doing is Making the ingredient object no longer related to the users shopping list but now is related to their pantry.
+https://recipeezy-app.herokuapp.com/pantry/1/ingredients/ <-- this new endpoint is for the particular use of wanting to swap which containers the ingredient is related too. So per the usual you need to specifiy which ingredient with that "1" which is it's id. The first word in the endpoint determines where this ingredient is going to go to, so in this case the ingredient is going to go to the pantry. The final word is just delineating what kind of object is being associated with that pantry.
 
-https://recipeezy-app.herokuapp.com/shopping_list/1/remove/  <-- This endpoint looks for the ingredient id, "1" in this case and then removes it's relationship to the shopping list. This way the object is not deleted but is taken out of the container.
+https://recipeezy-app.herokuapp.com/shopping_list/1/ingredients/  <-- this new endpoint is for the particular use of wanting to swap which containers the ingredient is related too. So per the usual you need to specifiy which ingredient with that "1" which is it's id. The first word in the endpoint determines where this ingredient is going to go to, so in this case the ingredient is going to go to the shopping list. The final word is just delineating what kind of object is being associated with that shopping list.
 
-https://recipeezy-app.herokuapp.com/pantry/1/remove/  <-- This endpoint looks for the ingredient id, "1" in this case and then removes it's relationship to the pantry. This way the object is not deleted but is taken out of the container.
+https://recipeezy-app.herokuapp.com/pantry/1/  <-- This endpoint looks for the ingredient id, "1" in this case and then removes it's relationship to the pantry. This way the object is not deleted but is taken out of the container.
+
+https://recipeezy-app.herokuapp.com/shopping_list/1/  <-- This endpoint looks for the ingredient id, "1" in this case and then removes it's relationship to the shopping list. This way the object is not deleted but is taken out of the container.
 
 ### DELETE requests
 
