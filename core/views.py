@@ -2,12 +2,12 @@ from django.shortcuts import render, get_object_or_404
 from rest_framework import generics, viewsets
 from rest_framework.exceptions import ValidationError
 from .models import (User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList, 
-RecipeHistory, SelectedRecipes)
+RecipeHistory, SelectedRecipes, FavoriteRecipes)
 from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
 ShoppingListSerializer, IngredientInfoSerializer, RecipePopulateSerializer, IngredientSwapSerializer, 
 RecipeHistorySerializer, RecipeSwapSerializer, SelectedRecipesSerializer, PantryIngredientSerializer,
 ShoppingListIngredientSerializer, UserSerializer, ShoppingListSwapSerializer, 
-ShoppingListMoveArraySerializer)
+ShoppingListMoveArraySerializer, FavoriteRecipesSerializer, RecipeFavoritesSerializer)
 
 
 class IngredientList(generics.ListCreateAPIView):
@@ -178,3 +178,32 @@ class SelectedRecipesAdd(generics.RetrieveUpdateDestroyAPIView):
     def perform_update(self, serializer):
         selectedrecipes = SelectedRecipes.objects.get(user=self.request.user)
         serializer.save(selectedrecipes=selectedrecipes, recipe_history=None)
+
+
+class FavoriteRecipesList(generics.ListAPIView):
+    queryset = Recipe.objects.all()
+    serializer_class = FavoriteRecipesSerializer
+
+    def get_queryset(self):
+        if self.request.user.id not in [favrec.user.id for favrec in FavoriteRecipes.objects.all()]:
+            FavoriteRecipes.objects.create(user=self.request.user)
+
+        return FavoriteRecipes.objects.filter(user=self.request.user)
+
+
+class FavoriteRecipesAdd(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSwapSerializer
+
+    def perform_update(self, serializer):
+        favorite_recipes = FavoriteRecipes.objects.get(user=self.request.user)
+        serializer.save(favorite_recipes=favorite_recipes)
+
+
+class FavoriteRecipesRemove(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSwapSerializer
+
+    def perform_update(self, serializer):
+        favorite_recipes = FavoriteRecipes.objects.get(user=self.request.user)
+        serializer.save(favorite_recipes=None)

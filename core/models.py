@@ -30,6 +30,11 @@ def create_recipe_history(sender, instance, created, **kwargs):
     if created:
         RecipeHistory.objects.create(user=instance)
 
+@receiver(post_save, sender=User)
+def create_favorite_recipes(sender, instance, created, **kwargs):
+    if created:
+        FavoriteRecipes.objects.create(user=instance)
+
 
 class Pantry(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_pantry')
@@ -60,9 +65,11 @@ class Recipe(models.Model):
         'SelectedRecipes', on_delete=models.CASCADE, blank=True, null=True, related_name="selected_recipes")
     recipe_history = models.ForeignKey('RecipeHistory', on_delete=models.CASCADE,
         blank=True, null=True, related_name='recipe_history')
+    favorite_recipes = models.ForeignKey('FavoriteRecipes', on_delete=models.CASCADE,
+        blank=True, null=True, related_name='favorite_recipes')
     origin = models.CharField(max_length=100, null=True, blank=True)
     instructions = models.TextField(max_length=2500, null=True, blank=True)
-    external_id = models.CharField(max_length=50, blank=True, null=True)
+    external_id = models.CharField(max_length=50, null=True, blank=True)
     img_id = models.CharField(max_length=150, null=True, blank=True)
     video_id = models.CharField(max_length=150, null=True, blank=True)
     
@@ -99,6 +106,13 @@ class SelectedRecipes(models.Model):
 
 class RecipeHistory(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_recipehistory')
+
+    def __str__(self):
+        return self.user.username
+
+
+class FavoriteRecipes(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_favoriterecipes')
 
     def __str__(self):
         return self.user.username

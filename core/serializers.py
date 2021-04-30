@@ -1,7 +1,7 @@
 from rest_framework import serializers, fields
 
 from .models import (User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList, 
-RecipeHistory, SelectedRecipes)
+RecipeHistory, SelectedRecipes, FavoriteRecipes)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -157,7 +157,7 @@ class RecipePopulateSerializer(serializers.ModelSerializer):
 class RecipeSwapSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
-        fields = ['id', 'selectedrecipes', 'recipe_history',]
+        fields = ['id', 'selectedrecipes', 'recipe_history', 'favorite_recipes']
 
 
 class RecipeHistorySerializer(serializers.ModelSerializer):
@@ -174,3 +174,23 @@ class SelectedRecipesSerializer(serializers.ModelSerializer):
     class Meta:
         model = SelectedRecipes
         fields = ['id', 'user', 'selected_recipes',]
+
+
+class RecipeFavoritesSerializer(serializers.ModelSerializer):
+    recipe_ingredients = RecipeIngredientSerializer(many=True, read_only=True)
+    ingredients = IngredientSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Recipe
+        fields = [
+            'id', 'external_id', 'title', 'category', 'origin', 'instructions', 'img_id', 'video_id', 'notes',
+                'selectedrecipes', 'recipe_history', 'recipe_ingredients', 'ingredients',
+        ]
+
+
+class FavoriteRecipesSerializer(serializers.ModelSerializer):
+    favorite_recipes = RecipeFavoritesSerializer(many=True)
+
+    class Meta:
+        model = FavoriteRecipes
+        fields = ['id', 'user', 'favorite_recipes',]
