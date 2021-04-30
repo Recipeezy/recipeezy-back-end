@@ -7,8 +7,8 @@ urlpatterns = [
     path('ingredients/', views.IngredientList.as_view(), name='ingredient_list'),
     path('ingredients/<int:pk>/', views.IngredientDetail.as_view(),
         name='ingredient_detail'),
-    path('ingredients/info/', views.IngredientInfoList.as_view()),
-    path('ingredients/swap_all/', views.IngredientSwapAll.as_view()),
+    path('ingredients/info/', views.IngredientInfoList.as_view(), name='ingredients_info'),
+    path('ingredients/swap_all/', views.IngredientSwapAll.as_view(), name='ingredients_swapall'),
     path('pantry/', views.PantryList.as_view(), name='pantry_list'),
     path('pantry/<int:pk>/', views.PantryRemove.as_view(), name='pantry_remove'),
     path('pantry/<int:pk>/ingredients/', views.IngredientToPantry.as_view(), name='ingredient_to_pantry'),
@@ -21,6 +21,9 @@ urlpatterns = [
     path('recipe_history/<int:pk>/', views.RecipeHistoryAdd.as_view(), name='recipehistory_add'),
     path('selected_recipes/', views.SelectedRecipesList.as_view(), name='selectedrecipes_list'),
     path('selected_recipes/<int:pk>/', views.SelectedRecipesAdd.as_view(), name='selectedrecipes_add'),
+    path('favorite_recipes/', views.FavoriteRecipesList.as_view(), name='favoriterecipes_list'),
+    path('favorite_recipes/<int:pk>/', views.FavoriteRecipesRemove.as_view(), name='favoriterecipes_remove'),
+    path('favorite_recipes/<int:pk>/add/', views.FavoriteRecipesAdd.as_view(), name='favoriterecipes_add'),
 ]
 
 urlpatterns += format_suffix_patterns(urlpatterns)
