@@ -2,11 +2,33 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
+from django.core.signals import request_finished
 from django.dispatch import receiver
 
 
 class User(AbstractUser):
     pass
+
+
+@receiver(post_save, sender=User)
+def create_pantry(sender, instance, created, **kwargs):
+    if created:
+        Pantry.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def create_shopping_list(sender, instance, created, **kwargs):
+    if created:
+        ShoppingList.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def create_selected_recipes(sender, instance, created, **kwargs):
+    if created:
+        SelectedRecipes.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def create_recipe_history(sender, instance, created, **kwargs):
+    if created:
+        RecipeHistory.objects.create(user=instance)
 
 
 class Pantry(models.Model):
