@@ -67,6 +67,8 @@ https://recipeezy-app.herokuapp.com/recipe_history/ <-- view the recipe history 
 
 https://recipeezy-app.herokuapp.com/selected_recipes/ <-- view the selected recipes container for the logged in user
 
+https://recipeezy-app.herokuapp.com/favorite_recipes/. <-- view the favorite recipes container for the logged in user
+
 ### POST requests
 
 https://recipeezy-app.herokuapp.com/pantry/ <-- this endpoint adds an ingredient straight into the pantry of the logged in user. If that ingredient exists already it will make it related to this users pantry instead of creating a brand model. Can add multiple ingredients at once
@@ -216,6 +218,71 @@ https://recipeezy-app.herokuapp.com/shopping_list/1/ingredients/  <-- this new e
 https://recipeezy-app.herokuapp.com/pantry/1/  <-- This endpoint looks for the ingredient id, "1" in this case and then removes it's relationship to the pantry. This way the object is not deleted but is taken out of the container.
 
 https://recipeezy-app.herokuapp.com/shopping_list/1/  <-- This endpoint looks for the ingredient id, "1" in this case and then removes it's relationship to the shopping list. This way the object is not deleted but is taken out of the container.
+
+https://recipeezy-app.herokuapp.com/favorite_recipes/1/  <-- This endpoint as it implies is for removing the connection between a recipe and the favorite recipes container. You use the id, "1" in this case, to choose which recipe you want to change. 
+
+https://recipeezy-app.herokuapp.com/favorite_recipes/1/add/  <-- This endpoint is for adding a recipe to your favorite recipes. This will only establish a connection to favorite recipes, not sever anything else. Use the recipe id, "1" in this case, in order to determine which recipe you are adding. As well as having the verb of "add" at the end so that the API knows which function to call since both this endpoint and the one above are PATCH requests
+
+https://recipeezy-app.herokuapp.com/recipes/1/  <-- If for some reason you need to manually change some information inside of the recipe, perhaps a minor edit or this functionality can be re-tooled for a favorite's section we also can do a PATCH on recipes. As usual the recipe you selected to do this PATCH on is in the url path, that "1" inside of the endpoint is what determines which recipe is used for this change. 
+
+```JSON
+# recipe before input or output
+{
+  "id": 1,
+  "external_id": null,
+  "title": "potatos",
+  "category": "potatos",
+  "origin": null,
+  "instructions": null,
+  "img_id": null,
+  "video_id": null,
+  "selectedrecipes": 1,
+  "recipe_history": null,
+  "recipe_ingredients": [
+    {
+      "measurement": "",
+      "ingredient": "potatos"
+    }
+  ],
+  "ingredients": [
+    {
+      "id": 1,
+      "name": "potatos"
+    }
+  ]
+}
+# Input for desired change
+{
+	"instructions": "boil 'em, mash 'em, stick 'em in a stew!"
+}
+# output
+{
+  "id": 2,
+  "external_id": null,
+  "title": "potatos",
+  "category": "potatos",
+  "origin": null,
+  "instructions": "boil 'em, mash 'em, stick 'em in a stew!",
+  "img_id": null,
+  "video_id": null,
+  "selectedrecipes": 2,
+  "recipe_history": null,
+  "recipe_ingredients": [
+    {
+      "measurement": "",
+      "ingredient": "potatos"
+    }
+  ],
+  "ingredients": [
+    {
+      "id": 1,
+      "name": "potatos"
+    }
+  ]
+}
+```
+
+
 
 ### DELETE requests
 
