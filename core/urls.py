@@ -22,8 +22,8 @@ urlpatterns = [
     path('selected_recipes/', views.SelectedRecipesList.as_view(), name='selectedrecipes_list'),
     path('selected_recipes/<int:pk>/', views.SelectedRecipesAdd.as_view(), name='selectedrecipes_add'),
     path('favorite_recipes/', views.FavoriteRecipesList.as_view(), name='favoriterecipes_list'),
-    path('favorite_recipes/<int:pk>/', views.FavoriteRecipesAdd.as_view(), name='favoriterecipes_add'),
-    path('favorite_recipes/<int:pk>/remove/', views.FavoriteRecipesRemove.as_view(), name='favoriterecipes_remove'),
+    path('favorite_recipes/<int:pk>/', views.FavoriteRecipesRemove.as_view(), name='favoriterecipes_remove'),
+    path('favorite_recipes/<int:pk>/add/', views.FavoriteRecipesAdd.as_view(), name='favoriterecipes_add'),
 ]
 
 urlpatterns += format_suffix_patterns(urlpatterns)
