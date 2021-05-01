@@ -59,7 +59,7 @@ class Recipe(models.Model):
         Ingredient,
         through='RecipeIngredient',
         through_fields=('recipe', 'ingredient'),
-        related_name='ingredients_info'
+        related_name='recipe_ingredient'
     )
     selectedrecipes = models.ForeignKey(
         'SelectedRecipes', on_delete=models.CASCADE, blank=True, null=True, related_name="selected_recipes")
@@ -82,7 +82,7 @@ class RecipeIngredient(models.Model):
         Recipe, on_delete=models.CASCADE, related_name="recipe_ingredients")
     ingredient = models.ForeignKey(
         Ingredient, on_delete=models.CASCADE, related_name="ingredients_list")
-    measurement = models.CharField(max_length=100)
+    measurement = models.CharField(max_length=150)
 
     def __str__(self):
         return f'{self.recipe}, {self.ingredient}'

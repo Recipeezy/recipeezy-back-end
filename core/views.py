@@ -4,7 +4,7 @@ from rest_framework.exceptions import ValidationError
 from .models import (User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList, 
 RecipeHistory, SelectedRecipes, FavoriteRecipes)
 from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
-ShoppingListSerializer, IngredientInfoSerializer, RecipePopulateSerializer, IngredientSwapSerializer, 
+ShoppingListSerializer, IngredientInfoSerializer, RecipeCreateSerializer, IngredientSwapSerializer, 
 RecipeHistorySerializer, RecipeSwapSerializer, SelectedRecipesSerializer, PantryIngredientSerializer,
 ShoppingListIngredientSerializer, UserSerializer, ShoppingListSwapSerializer, 
 ShoppingListMoveArraySerializer, FavoriteRecipesSerializer, RecipeFavoritesSerializer)
@@ -92,7 +92,7 @@ class RecipeList(generics.ListCreateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == "POST":
-            return RecipePopulateSerializer
+            return RecipeCreateSerializer
         return RecipeSerializer
 
     def perform_create(self, serializer):

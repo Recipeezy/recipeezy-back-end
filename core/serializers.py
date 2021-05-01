@@ -46,7 +46,7 @@ class PantryIngredientSerializer(serializers.ModelSerializer):
         model = Pantry
         fields = ['id', 'user', 'ingredients',]
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict):
         ingredients_data = validated_data.pop('ingredients')
         pantry = Pantry.objects.get(user=validated_data['user'])
         for ingredient_data in ingredients_data:
@@ -57,14 +57,15 @@ class PantryIngredientSerializer(serializers.ModelSerializer):
 
 class RecipeIngredientSerializer(serializers.ModelSerializer):
     ingredient = serializers.ReadOnlyField(source="ingredient.name")
+    ingredient_id = serializers.ReadOnlyField(source="ingredient.id")
 
     class Meta:
         model = RecipeIngredient
-        fields = ['measurement', 'ingredient',] 
+        fields = ['ingredient_id', 'ingredient', 'measurement',] 
 
 
 class RecipeSerializer(serializers.ModelSerializer):
-    recipe_ingredients = RecipeIngredientSerializer(many=True, read_only=True)
+    recipe_ingredients = RecipeIngredientSerializer(many=True)
     ingredients = IngredientSerializer(many=True, read_only=True)
 
     class Meta:
@@ -109,7 +110,7 @@ class ShoppingListMoveArraySerializer(serializers.ModelSerializer):
         model = ShoppingList
         fields = ['id', 'user', 'ingredients']
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict):
         ingredients_data = validated_data.pop('ingredients')
         pantry = Pantry.objects.get(user=validated_data['user'])
         shoppinglist = ShoppingList.objects.get(user=validated_data['user'])
@@ -128,7 +129,7 @@ class ShoppingListIngredientSerializer(serializers.ModelSerializer):
         model = ShoppingList
         fields = ['id', 'user', 'ingredients']
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict):
         ingredients_data = validated_data.pop('ingredients')
         shoppinglist = ShoppingList.objects.get(**validated_data)
         for ingredient_data in ingredients_data:
@@ -137,7 +138,7 @@ class ShoppingListIngredientSerializer(serializers.ModelSerializer):
         return shoppinglist
 
 
-class RecipePopulateSerializer(serializers.ModelSerializer):
+class RecipeCreateSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(many=True)
 
     class Meta:
@@ -145,12 +146,12 @@ class RecipePopulateSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'category', 'origin', 'instructions', 'img_id', 'video_id',
             'ingredients', 'selectedrecipes',]
 
-    def create(self, validated_data):
-        ingredients_data = validated_data.pop('ingredients')
-        recipe = Recipe.objects.create(**validated_data)
+    def create(self, validated_data: dict):
+        ingredients_data = self.context['request'].data['ingredients']
+        recipe = Recipe.objects.create(title=validated_data['title'], selectedrecipes=validated_data['selectedrecipes'])
         for ingredient_data in ingredients_data:
             ingredient, created = Ingredient.objects.get_or_create(name=ingredient_data['name'].lower())
-            recipe.ingredients.add(ingredient)
+            recipe.ingredients.add(ingredient, through_defaults={'measurement': ingredient_data['measurement']})
         return recipe
 
 
