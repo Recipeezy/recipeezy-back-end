@@ -5,9 +5,11 @@ RecipeHistory, SelectedRecipes, FavoriteRecipes)
 
 
 class UserSerializer(serializers.ModelSerializer):
+    recipes = serializers.ReadOnlyField(source="user.pantry.recipe")
+
     class Meta:
         model = User
-        fields = ['id', 'username',]
+        fields = ['id', 'username', 'recipes',]
 
 
 class IngredientSerializer(serializers.ModelSerializer):
@@ -74,14 +76,6 @@ class RecipeSerializer(serializers.ModelSerializer):
             'id', 'external_id', 'title', 'category', 'origin', 'instructions', 'img_id', 'video_id', 'selectedrecipes',
                 'recipe_history', 'recipe_ingredients', 'ingredients',
         ]
-
-
-class UserSerializer(serializers.ModelSerializer):
-    recipes = serializers.ReadOnlyField(source="user.pantry.recipe")
-
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'recipes',]
 
 
 class ShoppingListSerializer(serializers.ModelSerializer):

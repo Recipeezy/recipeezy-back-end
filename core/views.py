@@ -10,6 +10,11 @@ ShoppingListIngredientSerializer, UserSerializer, ShoppingListSwapSerializer,
 ShoppingListMoveArraySerializer, FavoriteRecipesSerializer, RecipeFavoritesSerializer)
 
 
+class UserList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+
 class IngredientList(generics.ListCreateAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
@@ -19,6 +24,11 @@ class IngredientInfoList(generics.ListAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientInfoSerializer
 
+
+class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
+    
 
 class IngredientToPantry(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ingredient.objects.all()
@@ -49,11 +59,6 @@ class IngredientToShopList(generics.RetrieveUpdateDestroyAPIView):
 class IngredientSwapAll(generics.ListCreateAPIView):
     queryset = ShoppingList.objects.all()
     serializer_class = ShoppingListMoveArraySerializer
-
-
-class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Ingredient.objects.all()
-    serializer_class = IngredientSerializer
 
 
 class PantryList(generics.ListCreateAPIView):
@@ -103,11 +108,6 @@ class RecipeList(generics.ListCreateAPIView):
 class RecipeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-
-
-class UserList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
 
 
 class ShoppingListDetail(generics.ListCreateAPIView):
