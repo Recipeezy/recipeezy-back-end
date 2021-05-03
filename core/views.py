@@ -6,7 +6,7 @@ RecipeHistory, SelectedRecipes, FavoriteRecipes)
 from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
 ShoppingListSerializer, IngredientInfoSerializer, RecipeCreateSerializer, IngredientSwapSerializer, 
 RecipeHistorySerializer, RecipeSwapSerializer, SelectedRecipesSerializer, PantryIngredientSerializer,
-ShoppingListIngredientSerializer, UserSerializer, ShoppingListSwapSerializer, 
+ShoppingListIngredientSerializer, UserSerializer, ShoppingListSwapSerializer, RecipeCreateTestSerializer,
 ShoppingListMoveArraySerializer, FavoriteRecipesSerializer, RecipeFavoritesSerializer)
 
 
@@ -28,7 +28,7 @@ class IngredientInfoList(generics.ListAPIView):
 class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    
+
 
 class IngredientToPantry(generics.RetrieveUpdateDestroyAPIView):
     queryset = Ingredient.objects.all()
@@ -98,6 +98,20 @@ class RecipeList(generics.ListCreateAPIView):
     def get_serializer_class(self):
         if self.request.method == "POST":
             return RecipeCreateSerializer
+        return RecipeSerializer
+
+    def perform_create(self, serializer):
+        selectedrecipes = SelectedRecipes.objects.get(user=self.request.user)
+        serializer.save(selectedrecipes=selectedrecipes)
+
+
+class RecipeTestList(generics.ListCreateAPIView):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return RecipeCreateTestSerializer
         return RecipeSerializer
 
     def perform_create(self, serializer):

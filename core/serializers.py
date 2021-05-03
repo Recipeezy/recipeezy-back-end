@@ -140,6 +140,23 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'category', 'origin', 'instructions', 'img_id', 'video_id',
             'ingredients', 'selectedrecipes',]
 
+    def create(self, validated_data):
+        ingredients_data = validated_data.pop('ingredients')
+        recipe = Recipe.objects.create(**validated_data)
+        for ingredient_data in ingredients_data:
+            ingredient, created = Ingredient.objects.get_or_create(name=ingredient_data['name'].lower())
+            recipe.ingredients.add(ingredient)
+        return recipe
+
+
+class RecipeCreateTestSerializer(serializers.ModelSerializer):
+    ingredients = IngredientSerializer(many=True)
+
+    class Meta:
+        model = Recipe
+        fields = ['id', 'title', 'category', 'origin', 'instructions', 'img_id', 'video_id',
+            'ingredients', 'selectedrecipes',]
+
     def create(self, validated_data: dict):
         ingredients_data = self.context['request'].data['ingredients']
         recipe = Recipe.objects.create(title=validated_data['title'], selectedrecipes=validated_data['selectedrecipes'])
@@ -147,6 +164,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             ingredient, created = Ingredient.objects.get_or_create(name=ingredient_data['name'].lower())
             recipe.ingredients.add(ingredient, through_defaults={'measurement': ingredient_data['measurement']})
         return recipe
+
 
 
 class RecipeSwapSerializer(serializers.ModelSerializer):
