@@ -151,11 +151,12 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
 class RecipeCreateTestSerializer(serializers.ModelSerializer):
     ingredients = IngredientSerializer(many=True)
+    recipe_ingredients = RecipeIngredientSerializer(many=True, read_only=True)
 
     class Meta:
         model = Recipe
         fields = ['id', 'title', 'category', 'origin', 'instructions', 'img_id', 'video_id',
-            'ingredients', 'selectedrecipes',]
+            'ingredients', 'selectedrecipes', 'recipe_ingredients',]
 
     def create(self, validated_data: dict):
         ingredients_data = self.context['request'].data['ingredients']
