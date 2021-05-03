@@ -4,10 +4,15 @@ from rest_framework.exceptions import ValidationError
 from .models import (User, Pantry, Recipe, RecipeIngredient, Ingredient, ShoppingList, 
 RecipeHistory, SelectedRecipes, FavoriteRecipes)
 from .serializers import (IngredientSerializer, PantrySerializer, RecipeSerializer, UserSerializer,
-ShoppingListSerializer, IngredientInfoSerializer, RecipePopulateSerializer, IngredientSwapSerializer, 
+ShoppingListSerializer, IngredientInfoSerializer, RecipeCreateSerializer, IngredientSwapSerializer, 
 RecipeHistorySerializer, RecipeSwapSerializer, SelectedRecipesSerializer, PantryIngredientSerializer,
-ShoppingListIngredientSerializer, UserSerializer, ShoppingListSwapSerializer, 
+ShoppingListIngredientSerializer, UserSerializer, ShoppingListSwapSerializer, RecipeCreateTestSerializer,
 ShoppingListMoveArraySerializer, FavoriteRecipesSerializer, RecipeFavoritesSerializer)
+
+
+class UserList(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 class IngredientList(generics.ListCreateAPIView):
@@ -18,6 +23,11 @@ class IngredientList(generics.ListCreateAPIView):
 class IngredientInfoList(generics.ListAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientInfoSerializer
+
+
+class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Ingredient.objects.all()
+    serializer_class = IngredientSerializer
 
 
 class IngredientToPantry(generics.RetrieveUpdateDestroyAPIView):
@@ -49,11 +59,6 @@ class IngredientToShopList(generics.RetrieveUpdateDestroyAPIView):
 class IngredientSwapAll(generics.ListCreateAPIView):
     queryset = ShoppingList.objects.all()
     serializer_class = ShoppingListMoveArraySerializer
-
-
-class IngredientDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Ingredient.objects.all()
-    serializer_class = IngredientSerializer
 
 
 class PantryList(generics.ListCreateAPIView):
@@ -92,7 +97,21 @@ class RecipeList(generics.ListCreateAPIView):
 
     def get_serializer_class(self):
         if self.request.method == "POST":
-            return RecipePopulateSerializer
+            return RecipeCreateSerializer
+        return RecipeSerializer
+
+    def perform_create(self, serializer):
+        selectedrecipes = SelectedRecipes.objects.get(user=self.request.user)
+        serializer.save(selectedrecipes=selectedrecipes)
+
+
+class RecipeTestList(generics.ListCreateAPIView):
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
+
+    def get_serializer_class(self):
+        if self.request.method == "POST":
+            return RecipeCreateTestSerializer
         return RecipeSerializer
 
     def perform_create(self, serializer):
@@ -103,11 +122,6 @@ class RecipeList(generics.ListCreateAPIView):
 class RecipeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-
-
-class UserList(generics.ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
 
 
 class ShoppingListDetail(generics.ListCreateAPIView):
