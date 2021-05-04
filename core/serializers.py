@@ -169,7 +169,6 @@ class RecipeCreateTestSerializer(serializers.ModelSerializer):
         return recipe
 
 
-
 class RecipeSwapSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
