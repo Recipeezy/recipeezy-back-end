@@ -160,7 +160,9 @@ class RecipeCreateTestSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data: dict):
         ingredients_data = self.context['request'].data['ingredients']
-        recipe = Recipe.objects.create(title=validated_data['title'], selectedrecipes=validated_data['selectedrecipes'])
+        recipe = Recipe.objects.create(title=validated_data['title'], selectedrecipes=validated_data['selectedrecipes'],
+            category=validated_data['category'], origin=validated_data['origin'], instructions=validated_data['instructions'],
+            img_id=validated_data['img_id'], video_id=validated_data['video_id'])
         for ingredient_data in ingredients_data:
             ingredient, created = Ingredient.objects.get_or_create(name=ingredient_data['name'].lower())
             recipe.ingredients.add(ingredient, through_defaults={'measurement': ingredient_data['measurement']})
