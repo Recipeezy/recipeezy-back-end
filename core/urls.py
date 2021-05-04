@@ -13,7 +13,6 @@ urlpatterns = [
     path('pantry/<int:pk>/', views.PantryRemove.as_view(), name='pantry_remove'),
     path('pantry/<int:pk>/ingredients/', views.IngredientToPantry.as_view(), name='ingredient_to_pantry'),
     path('recipes/', views.RecipeList.as_view(), name='recipes_list'),
-    path('recipes/test/', views.RecipeTestList.as_view()),
     path('recipes/<int:pk>/', views.RecipeDetail.as_view(), name='recipe_detail'),
     path('shopping_list/', views.ShoppingListDetail.as_view(), name='shoppinglist_detail'),
     path('shopping_list/<int:pk>/', views.ShoppingListRemove.as_view(), name='shoppinglist_remove'),
