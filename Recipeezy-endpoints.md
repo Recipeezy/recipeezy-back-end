@@ -141,36 +141,58 @@ Ex: "ingredients: [   {   "name":  "potato"   }     ]". Even if only adding one 
 
 https://recipeezy-app.herokuapp.com/recipes/ <-- required fields are "title" and "ingredients". When adding ingredients in with JSON make sure you wrap it properly. 
 
-Ex: "ingredients: [   {   "name":  "potato"   }     ]". Even if only adding one ingredient it needs to be wrapped in square brackets to make it a list.
+Ex: "ingredients: [   {   "name":  "potato", "measurement": "1"   }     ]". Even if only adding one ingredient it needs to be wrapped in square brackets to make it a list.
 
 ```JSON
 # input
 {
-	"title": "Chicken Noodle Soup",
+	"title": "beef stew",
+	"category": "I am a category",
+	"origin": "origin stuff",
+	"instructions": "I am instructions",
+	"img_id": "img id data",
+	"video_id": "video id data",
 	"ingredients": [
 		{
-			"name": "chicken"
-		},                        < --- notice the comma, indicating more
-		{																more items will be made
-			"name": "broth"
+			"name": "carrot",
+			"measurement": "3"
+		},
+		{
+			"name": "beef",
+			"measurement": "1/2 lb"
 		}
 	]
 }
 # output
 {
-  "id": 53,
-  "title": "Chicken Noodle Soup",
-  "category": null,
-  "origin": null,
-  "instructions": null,
+  "id": 33,
+  "title": "beef stew",
+  "category": "I am a category",
+  "origin": "origin stuff",
+  "instructions": "I am instructions",
+  "img_id": "img id data",
+  "video_id": "video id data",
   "ingredients": [
     {
-      "id": 43,
-      "name": "chicken"
+      "id": 11,
+      "name": "carrot"
     },
     {
-      "id": 44,
-      "name": "broth"
+      "id": 12,
+      "name": "beef"
+    }
+  ],
+  "selectedrecipes": 1,
+  "recipe_ingredients": [
+    {
+      "ingredient_id": 11,
+      "ingredient": "carrot",
+      "measurement": "3"
+    },
+    {
+      "ingredient_id": 12,
+      "ingredient": "beef",
+      "measurement": "1/2 lb"
     }
   ]
 }
