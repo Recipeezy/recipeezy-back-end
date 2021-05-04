@@ -61,9 +61,10 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
     ingredient = serializers.ReadOnlyField(source="ingredient.name")
     ingredient_id = serializers.ReadOnlyField(source="ingredient.id")
 
+
     class Meta:
         model = RecipeIngredient
-        fields = ['ingredient_id', 'ingredient', 'measurement',] 
+        fields = ['id', 'ingredient_id', 'ingredient', 'measurement',] 
 
 
 class RecipeSerializer(serializers.ModelSerializer):
@@ -148,7 +149,8 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             img_id=validated_data['img_id'], video_id=validated_data['video_id'])
         for ingredient_data in ingredients_data:
             ingredient, created = Ingredient.objects.get_or_create(name=ingredient_data['name'].lower())
-            recipe.ingredients.add(ingredient, through_defaults={'measurement': ingredient_data['measurement']})
+            recipe_ingredient = RecipeIngredient.objects.create(recipe=recipe, ingredient=ingredient,
+            measurement=ingredient_data['measurement'])
         return recipe
 
 
